@@ -4,7 +4,7 @@
             <nav class="navbar navbar-expand-lg navbar-light ">
                 <div class="container-fluid p-0">
 
-                    <a class="navbar-brand" routerLink="/dashboard" style="width:120px"><img src="assets/images/web-d-logo.jpg" class="img-fluid"></a>
+                    <a class="navbar-brand" routerLink="/dashboard" style="width:120px"><img src="assets/images/web-d-logo.png" class="img-fluid"></a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
                     </button>
@@ -17,6 +17,14 @@
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item d-menu me-3">
                                 <a class="nav-link font-15 font-weight-400 active" routerLink="/dashboard" ><i class="fas fa-th-list text-main"></i> Dashboard</a>
+                            </li>
+                            <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
+                                <a class="nav-link dropdown-toggle font-15 font-weight-400 active" href="javascript:;" data-bs-toggle="dropdown" aria-haspopup="true" aria-haspopup="true" aria-expanded="false"><i class="fas fa-bars text-main"></i> Masters</a>
+                                <ul class="dropdown-menu shadow">
+                                    
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/categories">Categories</a></li>
+                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/sub-categories">Sub-Categories</a></li> 
+                                </ul>
                             </li>
                             <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
                                 <a class="nav-link dropdown-toggle font-15 font-weight-400 active" href="javascript:;" data-bs-toggle="dropdown" aria-haspopup="true" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle text-main"></i> Users</a>

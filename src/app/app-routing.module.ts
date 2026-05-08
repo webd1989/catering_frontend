@@ -17,6 +17,8 @@ import { TargetComponent } from './target/target.component';
 import { QuotationsComponent } from './quotations/quotations.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { AmcComponent } from './amc/amc.component';
+import { CategoriesComponent } from './categories/categories.component';
+import { SubCategoryComponent } from './sub-category/sub-category.component';
 
 const routes: Routes = [
   {
@@ -60,6 +62,12 @@ const routes: Routes = [
   },
   {
     path:'amc',component:AmcComponent
+  },
+  {
+    path:'categories',component:CategoriesComponent
+  },
+  {
+    path:'sub-categories',component:SubCategoryComponent
   }
 ];
 

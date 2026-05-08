@@ -28,6 +28,8 @@ import { QuotationsComponent } from './quotations/quotations.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { AmcComponent } from './amc/amc.component';
+import { CategoriesComponent } from './categories/categories.component';
+import { SubCategoryComponent } from './sub-category/sub-category.component';
 
 
 
@@ -51,7 +53,9 @@ import { AmcComponent } from './amc/amc.component';
     TargetComponent,
     QuotationsComponent,
     ProjectsComponent,
-    AmcComponent
+    AmcComponent,
+    CategoriesComponent,
+    SubCategoryComponent
   ],
   imports: [
     BrowserModule,
