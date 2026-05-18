@@ -41,10 +41,8 @@ export class HeaderComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.userType = localStorage.getItem('user_type');
-    setInterval(() => {
-      this.checkLoginTime(); 
-      }, 20000);
-      this.saveLoginTime();
+    //setInterval(() => {this.checkLoginTime(); }, 20000);
+    this.saveLoginTime();
     this.GetProfile();
   }
   logout(){

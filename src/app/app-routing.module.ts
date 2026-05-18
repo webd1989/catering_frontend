@@ -16,47 +16,28 @@ import {HashLocationStrategy, LocationStrategy} from "@angular/common";
 import { CategoriesComponent } from './categories/categories.component';
 import { SubCategoryComponent } from './sub-category/sub-category.component';
 import { LeadsComponent } from './leads/leads.component';
+import { ItemsComponent } from './items/items.component';
+import { MenuListComponent } from './menues/menu-list/menu-list.component';
+import { AddMenuComponent } from './menues/add-menu/add-menu.component';
+import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
 
 const routes: Routes = [
-  {
-    path:'',component:LoginComponent
-  },
-  {
-    path:'forgot-password',component:ForgotPasswordComponent
-  },
-  {
-    path:'dashboard',component:DashboardComponent
-  },
-  {
-    path:'profile',component:ProfileComponent
-  },
-  {
-    path:'users',component:UserListComponent
-  },
-  {
-    path:'change-password',component:ChangePasswordComponent
-  },
-  {
-    path:'company-settings',component:CompanySettingsComponent
-  },
-  {
-    path:'company-notifications',component:CompanyNotificationsComponent
-  },
-  {
-    path:'company-authentication',component:CompanyAuthenticationComponent
-  },
-  {
-    path:'contacts',component:ContactListComponent
-  },
-  {
-    path:'categories',component:CategoriesComponent
-  },
-  {
-    path:'sub-categories',component:SubCategoryComponent
-  },
-  {
-    path:'leads',component:LeadsComponent
-  }
+  {path:'',component:LoginComponent},
+  {path:'forgot-password',component:ForgotPasswordComponent},
+  {path:'dashboard',component:DashboardComponent},
+  {path:'profile',component:ProfileComponent},
+  {path:'users',component:UserListComponent},
+  {path:'change-password',component:ChangePasswordComponent},
+  {path:'company-settings',component:CompanySettingsComponent},
+  {path:'company-notifications',component:CompanyNotificationsComponent},
+  {path:'company-authentication',component:CompanyAuthenticationComponent},
+  {path:'contacts',component:ContactListComponent},
+  {path:'categories',component:CategoriesComponent},
+  {path:'sub-categories',component:SubCategoryComponent},
+  {path:'leads',component:LeadsComponent},
+  {path:'items',component:ItemsComponent},
+  {path:'menu-list',component:MenuListComponent},
+  {path:'add-menu',component:AddMenuComponent}
 ];
 
 @NgModule({

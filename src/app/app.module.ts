@@ -28,6 +28,9 @@ import { CategoriesComponent } from './categories/categories.component';
 import { SubCategoryComponent } from './sub-category/sub-category.component';
 import { LeadsComponent } from './leads/leads.component';
 import { ItemsComponent } from './items/items.component';
+import { MenuListComponent } from './menues/menu-list/menu-list.component';
+import { AddMenuComponent } from './menues/add-menu/add-menu.component';
+import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
 
 
 
@@ -51,7 +54,10 @@ import { ItemsComponent } from './items/items.component';
     CategoriesComponent,
     SubCategoryComponent,
     LeadsComponent,
-    ItemsComponent
+    ItemsComponent,
+    MenuListComponent,
+    AddMenuComponent,
+    EditMenuComponent
   ],
   imports: [
     BrowserModule,

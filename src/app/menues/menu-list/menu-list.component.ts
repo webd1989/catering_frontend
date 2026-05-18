@@ -1,6 +1,6 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 declare var $: any;
-import { ServiceService } from '../services/service.service';
+import { ServiceService } from '../../services/service.service';
 import { Router } from '@angular/router';
 import {from, noop, of, Subject} from 'rxjs';
 import {map, mergeAll, mergeMap, takeUntil} from 'rxjs/operators';
@@ -12,11 +12,11 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 @Component({
-  selector: 'app-items',
-  templateUrl: './items.component.html',
-  styleUrls: ['./items.component.css']
+  selector: 'app-menu-list',
+  templateUrl: './menu-list.component.html',
+  styleUrls: ['./menu-list.component.css']
 })
-export class ItemsComponent implements OnInit,OnDestroy {
+export class MenuListComponent implements OnInit,OnDestroy {
 
   users:any;
   p: number = 1;
