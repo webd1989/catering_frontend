@@ -13,12 +13,9 @@ import { CompanyAuthenticationComponent } from './company-authentication/company
 import { ContactListComponent } from './contacts/contact-list/contact-list.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import {HashLocationStrategy, LocationStrategy} from "@angular/common";
-import { TargetComponent } from './target/target.component';
-import { QuotationsComponent } from './quotations/quotations.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { AmcComponent } from './amc/amc.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SubCategoryComponent } from './sub-category/sub-category.component';
+import { LeadsComponent } from './leads/leads.component';
 
 const routes: Routes = [
   {
@@ -52,22 +49,13 @@ const routes: Routes = [
     path:'contacts',component:ContactListComponent
   },
   {
-    path:'invoices',component:TargetComponent
-  },
-  {
-    path:'quotations',component:QuotationsComponent
-  },
-  {
-    path:'projects',component:ProjectsComponent
-  },
-  {
-    path:'amc',component:AmcComponent
-  },
-  {
     path:'categories',component:CategoriesComponent
   },
   {
     path:'sub-categories',component:SubCategoryComponent
+  },
+  {
+    path:'leads',component:LeadsComponent
   }
 ];
 

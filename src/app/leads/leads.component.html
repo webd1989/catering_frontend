@@ -11,20 +11,21 @@
                 <div class="page-card-title align-items-center justify-content-between">
                      <div class="row">
                         <div class="col-lg-2 col-6 mb-2">
-                            <input type="text" name="title_search" id="title_search" class="form-control filter-p" placeholder="Title">
+                            <input type="text" name="title_full_name" id="title_full_name" class="form-control filter-p" placeholder="Name">
                         </div>
                         <div class="col-lg-2 col-6 mb-2">
-                        <select name="status_search" id="status_search" class="form-select">
+                            <input type="text" name="title_mobile" id="title_mobile" class="form-control filter-p" placeholder="Mobile">
+                        <!-- <select name="status_search" id="status_search" class="form-select">
                         <option value="">Status</option>
                         <option value="1">Active</option>
                         <option value="2">Inactive</option>
-                        </select>
+                        </select> -->
                         </div>
                         
                         <div class="col-lg-2 col-6 mb-2">
 <a (click)="searchData();" id="" class="btn btn-warning btn-sm text-uppercase"><i class="fas fa-search"></i></a>
                             <a (click)="reset();" style="margin-left: 10px;"  class="btn btn-primary btn-sm text-uppercase" title="Reset"><i class="fas fa-retweet"></i></a>
-                            <a href="javascript:;" (click)="setHeading()"  data-bs-toggle="modal" data-bs-target="#createTemplate"style="margin-left: 10px;"  class="btn btn-warning btn-sm text-uppercase" title="Create Invoice"><i class="fas fa-plus"></i></a>
+                            <!-- <a href="javascript:;" (click)="setHeading()"  data-bs-toggle="modal" data-bs-target="#createTemplate"style="margin-left: 10px;"  class="btn btn-warning btn-sm text-uppercase" title="Create Invoice"><i class="fas fa-plus"></i></a> -->
                         </div>
                     </div>
                     
@@ -35,10 +36,13 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase whitespace-nowrap">S.NO</th>
-                                        <th class="text-uppercase whitespace-nowrap">Title</th>
-                                        <th class="text-uppercase whitespace-nowrap">Status</th>
+                                        <th class="text-uppercase whitespace-nowrap">Lead Code</th>
+                                        <th class="text-uppercase whitespace-nowrap">Name</th>
+                                        <th class="text-uppercase whitespace-nowrap">Mobile</th>
+                                        <th class="text-uppercase whitespace-nowrap">Country</th>
+                                        <th class="text-uppercase whitespace-nowrap">State</th>
+                                        <th class="text-uppercase whitespace-nowrap">City</th>
                                         <th class="text-uppercase whitespace-nowrap">Created Date</th>
-                                        <th class="text-uppercase whitespace-nowrap">ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,23 +50,14 @@
                                         <td class="whitespace-nowrap">{{i+1}}</td>
                                       
                                 
-                                        <td class="whitespace-nowrap">{{user.title}}</td>
-                                        <td>
-                                            <a style="cursor:pointer" (click)="updateStatus(user.id,'2')" *ngIf="user.status == 1" class="btn btn-sm btn-outline-success text-uppercase text-center font-12 me-2">Active</a>
-                                            <a style="cursor:pointer" (click)="updateStatus(user.id,'1')" *ngIf="user.status == 2" class="btn btn-sm btn-outline-danger text-uppercase text-center font-12 me-2">Inactive</a>
-                                        </td>
+                                        <td class="whitespace-nowrap">{{user?.lead_code}}</td>
+                                        <td class="whitespace-nowrap">{{user?.full_name}}</td>
+                                        <td class="whitespace-nowrap">{{user?.mobile}}</td>
+                                        <td class="whitespace-nowrap">{{user?.country}}</td>
+                                        <td class="whitespace-nowrap">{{user?.state}}</td>
+                                        <td class="whitespace-nowrap">{{user?.city}}</td>
                                         <td class="text-capitalize whitespace-nowrap">{{user.display_date}}</td>
-                                        <td class="text-capitalize whitespace-nowrap">
-                                            <a (click)="generateQuotationPDF(user.id)" class="text-capitalize font-12 text-info me-3">
-                                                <i class="far fa-download"></i>
-                                            </a>
-                                            <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#createTemplate" (click)="getQuotation(user.id)" class="text-capitalize font-12 text-info me-3">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <a href="javascript:;" (click)="Delete(user.id)" class="text-capitalize font-12 text-red" data-bs-toggle="modal" data-bs-target="#deleteTemplate">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
-                                        </td>
+                                        
                                     </tr>
                                     <tr><td colspan="10"><div class="pagiation"><pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls></div></td></tr>
 
@@ -105,7 +100,7 @@
                     </div>
                     <div class="col-lg-12">
                     <div class="form-group mb-3">
-                     <textarea class="form-control" id="description" placeholder="Please Enter Description" rows="20"></textarea>
+                     <textarea class="form-control" id="description" placeholder="Please Enter Description"></textarea>
                     </div>
                     </div>
                     </div>

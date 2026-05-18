@@ -23,13 +23,11 @@ import { TabsComponent } from './tabs/tabs.component';
 import { FormsModule } from '@angular/forms';
 import { DatepickerModule } from 'ng2-datepicker';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { TargetComponent } from './target/target.component';
-import { QuotationsComponent } from './quotations/quotations.component';
-import { ProjectsComponent } from './projects/projects.component';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
-import { AmcComponent } from './amc/amc.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SubCategoryComponent } from './sub-category/sub-category.component';
+import { LeadsComponent } from './leads/leads.component';
+import { ItemsComponent } from './items/items.component';
 
 
 
@@ -50,12 +48,10 @@ import { SubCategoryComponent } from './sub-category/sub-category.component';
     CompanyAuthenticationComponent,
     TabsComponent,
     ForgotPasswordComponent,
-    TargetComponent,
-    QuotationsComponent,
-    ProjectsComponent,
-    AmcComponent,
     CategoriesComponent,
-    SubCategoryComponent
+    SubCategoryComponent,
+    LeadsComponent,
+    ItemsComponent
   ],
   imports: [
     BrowserModule,

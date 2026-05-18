@@ -26,26 +26,17 @@
                                      <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/sub-categories">Sub-Categories</a></li> 
                                 </ul>
                             </li>
-                            <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
+                            <!-- <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
                                 <a class="nav-link dropdown-toggle font-15 font-weight-400 active" href="javascript:;" data-bs-toggle="dropdown" aria-haspopup="true" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle text-main"></i> Users</a>
                                 <ul class="dropdown-menu shadow">
                                     
                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/users">Users</a></li>
                                      <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/contacts">Clients</a></li> 
                                 </ul>
-                            </li>
+                            </li> -->
                             
                             <li *ngIf="userType=='Admin'" class="nav-item d-menu">
-                                <a class="nav-link font-15 font-weight-400 active" routerLink="/invoices"><i class="fas fa-bars text-main"></i> Invoices</a>
-                            </li>
-                            <li *ngIf="userType=='Admin'" class="nav-item d-menu">
-                                <a class="nav-link font-15 font-weight-400 active" routerLink="/quotations"><i class="fas fa-bars text-main"></i> Quotations</a>
-                            </li>
-                            <li *ngIf="userType=='Admin'" class="nav-item d-menu">
-                                <a class="nav-link font-15 font-weight-400 active" routerLink="/projects"><i class="fas fa-bars text-main"></i> Projects</a>
-                            </li>
-                            <li *ngIf="userType=='Admin'" class="nav-item d-menu">
-                                <a class="nav-link font-15 font-weight-400 active" routerLink="/amc"><i class="fas fa-bars text-main"></i> AMC</a>
+                                <a class="nav-link font-15 font-weight-400 active" routerLink="/leads"><i class="fas fa-bars text-main"></i> Leads</a>
                             </li>
                             
                            

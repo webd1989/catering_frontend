@@ -12,11 +12,11 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 @Component({
-  selector: 'app-quotations',
-  templateUrl: './quotations.component.html',
-  styleUrls: ['./quotations.component.css']
+  selector: 'app-leads',
+  templateUrl: './leads.component.html',
+  styleUrls: ['./leads.component.css']
 })
-export class QuotationsComponent implements OnInit,OnDestroy {
+export class LeadsComponent implements OnInit,OnDestroy {
 
   users:any;
   p: number = 1;
@@ -62,7 +62,7 @@ export class QuotationsComponent implements OnInit,OnDestroy {
  
   setHeading(){
     this.action = 'Add';
-    this.heading = 'Create Quotation';
+    this.heading = 'Create Category';
     this.cleanForm();
   }
   cleanForm(){
@@ -75,10 +75,11 @@ export class QuotationsComponent implements OnInit,OnDestroy {
       const data = {
         id:$('#r_id').val(),
         description:$('#description').val(),
-        title:$('#title').val()
+        title:$('#title').val(),
+        parent_id:0
       };
       if(this.action == 'Add'){
-        this.appService.postData('quotation/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        this.appService.postData('lead/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
           var r:any=res;
           $('#addUserBtn').html('Save');
           if(r.success){
@@ -93,7 +94,7 @@ export class QuotationsComponent implements OnInit,OnDestroy {
         });
       }
       if(this.action == 'Edit'){
-        this.appService.postData('quotation/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        this.appService.postData('lead/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
           var r:any=res;
           $('#addUserBtn').html('Save');
           if(r.success){
@@ -109,64 +110,19 @@ export class QuotationsComponent implements OnInit,OnDestroy {
       }
       
     }
- 
-
-
-  generateQuotationPDF(invoice_id:number){
-    const data = {
-        token: localStorage.getItem('token'),
-        invoice_id:invoice_id
-      };
-      this.appService.postData('quotation/pdf/generate',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          window.open(r.download_url, "_blank");
-        }else{
-          this.toastr.error(r.message,"Error");
-        }
-        
-      },error=>{
-        this.toastr.error("Server Error","Error");
-      });
-  }
-  generateInvoice(){
-    if(this.selectedRow.length > 0){
-      const data = {
-        token: localStorage.getItem('token'),
-        selectedRow: this.selectedRow,
-      };
-      this.appService.postData('quotation/csv/generate',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          window.location.href = r.download_url;
-        }else{
-          this.toastr.error(r.message,"Error");
-        }
-        
-      },error=>{
-        this.toastr.error("Server Error","Error");
-      });
-    }else{
-      Swal.fire(
-        'Warning',
-        'Please select at least one invoice.',
-        'warning'
-      )
-    }
-  }
 
   getList(){
     const data = {
       token: localStorage.getItem('token'),
-      bill_no: $("#bill_no").val(),
-      customer_name: $("#customer_name").val(),
-      amount: $("#amount").val(),
+      title_search: $("#title_search").val(),
+      status_search: $("#status_search").val(),
+      type:'Category',
       page: this.p
     };
     this.getListFromServer(data);
   }
   getListFromServer(form:any){
-    this.appService.postData('quotation/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('lead/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.users = r.users.data;
       this.total = r.users.total;
@@ -212,7 +168,7 @@ export class QuotationsComponent implements OnInit,OnDestroy {
   }
   updateStatus(userID:string,status:string){
     const data = {};
-    this.appService.putData('quotation/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.putData('lead/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.getList();
     },error=>{
@@ -220,13 +176,13 @@ export class QuotationsComponent implements OnInit,OnDestroy {
     });
   }
   getQuotation(id:number){
-      this.heading = 'Edit Quotation';
+      this.heading = 'Edit Category';
       this.action = 'Edit';
       const data = {
         token: localStorage.getItem('token'),
         id: id
       };
-      this.appService.postData('quotation/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      this.appService.postData('lead/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
         var r:any=res;
         if(r.success){
           this.quotationData = r.user;
@@ -243,18 +199,19 @@ export class QuotationsComponent implements OnInit,OnDestroy {
   searchData(){
     const data = {
       token: localStorage.getItem('token'),
-      title_search: $("#title_search").val(),
-      status_search: $("#status_search").val(),
+      full_name: $("#title_full_name").val(),
+      mobile: $("#title_mobile").val(),
       page: this.p
     };
     this.getListFromServer(data);
   }
   reset(){
-    $("#title_search").val('');
-    $("#status_search").val('');
+    $("#title_full_name").val('');
+    $("#title_mobile").val('');
     const data = {
       token: localStorage.getItem('token'),
-      search_key: '',
+      full_name: '',
+      mobile:'',
       page: 1
     };
     this.getListFromServer(data);
@@ -264,3 +221,5 @@ export class QuotationsComponent implements OnInit,OnDestroy {
   }
 
 }
+
+
