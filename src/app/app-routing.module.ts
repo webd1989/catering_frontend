@@ -20,6 +20,9 @@ import { ItemsComponent } from './items/items.component';
 import { MenuListComponent } from './menues/menu-list/menu-list.component';
 import { AddMenuComponent } from './menues/add-menu/add-menu.component';
 import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
+import { VendorsComponent } from './vendors/vendors.component';
+import { UnitsComponent } from './units/units.component';
+import { MaterialCategoriesComponent } from './material-categories/material-categories.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -37,7 +40,11 @@ const routes: Routes = [
   {path:'leads',component:LeadsComponent},
   {path:'items',component:ItemsComponent},
   {path:'menu-list',component:MenuListComponent},
-  {path:'add-menu',component:AddMenuComponent}
+  {path:'add-menu',component:AddMenuComponent},
+  {path:'edit-menu/:id',component:EditMenuComponent},
+  {path:'vendors',component:VendorsComponent},
+  {path:'units',component:UnitsComponent},
+  {path:'material-categories',component:MaterialCategoriesComponent},
 ];
 
 @NgModule({

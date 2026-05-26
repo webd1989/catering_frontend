@@ -91,6 +91,7 @@ export class ContactListComponent implements OnInit,OnDestroy {
       gst_no:$('#gst_no').val(),
       company:$('#company').val(),
       description:$('#description').val(),
+      type:'Customer'
     };
     if(this.action == 'Add'){
       this.appService.postData('customer/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
@@ -128,6 +129,7 @@ export class ContactListComponent implements OnInit,OnDestroy {
   getList(){
     const data = {
       token: localStorage.getItem('token'),
+      type:'Customer',
       page: this.p
     };
     this.getListFromServer(data);
@@ -235,6 +237,7 @@ export class ContactListComponent implements OnInit,OnDestroy {
     const data = {
       token: localStorage.getItem('token'),
       search_key: $("#search_key").val(),
+      type:'Customer',
       page: this.p
     };
     this.getListFromServer(data);
@@ -246,6 +249,7 @@ export class ContactListComponent implements OnInit,OnDestroy {
       email: '',
       phone: '',
       zipcode: '',
+      type:'Customer',
       page: this.p
     };
     this.getListFromServer(data);

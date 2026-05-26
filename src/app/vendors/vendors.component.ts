@@ -1,25 +1,49 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 declare var $: any;
-import { ServiceService } from '../../services/service.service';
+import { ServiceService } from '../services/service.service';
 import { Router } from '@angular/router';
 import {from, noop, of, Subject} from 'rxjs';
 import {map, mergeAll, mergeMap, takeUntil} from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
+import { DatepickerOptions } from 'ng2-datepicker';
+import { getYear } from 'date-fns';
+import locale from 'date-fns/locale/en-US';
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.css']
+  selector: 'app-vendors',
+  templateUrl: './vendors.component.html',
+  styleUrls: ['./vendors.component.css']
 })
-export class UserListComponent implements OnInit,OnDestroy {
+export class VendorsComponent implements OnInit,OnDestroy {
 
   users:any;
-  franchise:any;
+  accounts:any;
   p: number = 1;
   total: number = 0;
   heading:any = '';
   action:any = '';
+  preffered_communication:any='p_call';
+  userData:any;
+  contactData:any;
+  orignalPcData = '';
+  
+  dob_date = new Date();
+  lease_expiration_date = new Date();
+  options: DatepickerOptions = {
+    minYear: getYear(new Date()) - 30, // minimum available and selectable year
+    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
+    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
+    format: 'M/d/Y', // date format to display in input
+    formatTitle: 'LLLL yyyy',
+    formatDays: 'EEEEE',
+    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
+    locale: locale, // date-fns locale
+    position: 'bottom',
+    inputClass: 'dob-datepicker', // custom input CSS class to be applied
+    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
+    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
+  };
 
   destroy$ = new Subject();
 
@@ -35,17 +59,42 @@ export class UserListComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     this.getList();
   }
+  cleanForm(){
+    $('#name').val('');
+    $('#phone').val('');
+    $('#email').val('');
+    $('#address').val('');   
+    $('#city').val('');  
+    $('#gst_no').val(''); 
+    $('#company').val('');
+    $('#description').val('');
+  }
+  removeError(id:string){
+    $('#'+id).removeClass('error_validation');
+  }
   Create(){
+    if($.trim($('#name').val()) == ''){
+      $('#name').addClass('error_validation');
+    }
     $('#addUserBtn').html('Processing...');
+    var other_preffered_communication = '';
+    if(this.preffered_communication == 'p_others'){
+      other_preffered_communication = $('#other_pc').val();
+    }
     const data = {
       id:$('#r_id').val(),
       name:$('#name').val(),
       phone:$('#phone').val(),
       email:$('#email').val(),
-      password:$('#password').val()
+      address:$('#address').val(),
+      city:$('#city').val(),
+      gst_no:$('#gst_no').val(),
+      company:$('#company').val(),
+      description:$('#description').val(),
+      type:'Vendor'
     };
     if(this.action == 'Add'){
-      this.appService.postData('user/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      this.appService.postData('customer/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
         var r:any=res;
         $('#addUserBtn').html('Save');
         if(r.success){
@@ -60,7 +109,7 @@ export class UserListComponent implements OnInit,OnDestroy {
       });
     }
     if(this.action == 'Edit'){
-      this.appService.postData('user/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      this.appService.postData('customer/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
         var r:any=res;
         $('#addUserBtn').html('Save');
         if(r.success){
@@ -76,37 +125,26 @@ export class UserListComponent implements OnInit,OnDestroy {
     }
     
   }
-  getFranchise(){
-    var form = {};
-    this.appService.postData('all/franchise/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-      var r:any=res;
-      this.franchise = r.users;
-    },error=>{
-      this.toastr.error("Server Error","Error");
-    });
-  }
-  cleanForm(){
-    $('#name').val('');
-    $('#phone').val('');
-    $('#email').val('');
-    $('#password').val('');
-  }
+  
   getList(){
     const data = {
       token: localStorage.getItem('token'),
-      page: this.p
+      page: this.p,
+      type:'Vendor'
     };
     this.getListFromServer(data);
   }
   getListFromServer(form:any){
-    this.appService.postData('user/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('customer/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.users = r.users.data;
       this.total = r.users.total;
     },error=>{
-      this.toastr.error("Server Error","Error");
+      //this.toastr.error("Server Error","Error");
     });
   }
+
+  
   /**
    * Write code on Method
    *
@@ -118,34 +156,47 @@ export class UserListComponent implements OnInit,OnDestroy {
   }
   setHeading(){
     this.action = 'Add';
-    this.heading = 'Add New Employee';
+    this.heading = 'Create a Vendor';
     this.cleanForm();
-    this.getFranchise();
+  }
+ 
+  GetProfile(){
+    this.appService.getData('profile/get').pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
+      if(r.success){
+        this.userData = r.user_date;
+      }else{
+        
+      }
+    },error =>{
+      
+    });
   }
   getUser(id:number){
-    this.getFranchise();
-    this.heading = 'Edit Employee';
+    this.heading = 'Edit Vendor';
     this.action = 'Edit';
     const data = {
       token: localStorage.getItem('token'),
       id: id
     };
-    this.appService.postData('user/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('customer/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       if(r.success){
+        this.contactData = r.user;
         $('#r_id').val(r.user.id);
         $('#name').val(r.user.name);
         $('#email').val(r.user.email);
         $('#phone').val(r.user.phone);
+        $('#address').val(r.user.address);
+        $('#city').val(r.user.city);
+        $('#gst_no').val(r.user.gst_no);
+        $('#company').val(r.user.company);
+        $('#description').val(r.user.description);
       }else{
         
       }
     },error =>{
-      Swal.fire(
-        'Error',
-        'Internal server error',
-        'error'
-      )
+     
     });
   }
   Delete(userID:string){
@@ -175,7 +226,7 @@ export class UserListComponent implements OnInit,OnDestroy {
   }
   updateStatus(userID:string,status:string){
     const data = {};
-    this.appService.putData('user/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.putData('customer/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.getList();
     },error=>{
@@ -186,6 +237,7 @@ export class UserListComponent implements OnInit,OnDestroy {
     const data = {
       token: localStorage.getItem('token'),
       search_key: $("#search_key").val(),
+      type:'Vendor',
       page: this.p
     };
     this.getListFromServer(data);
@@ -197,6 +249,7 @@ export class UserListComponent implements OnInit,OnDestroy {
       email: '',
       phone: '',
       zipcode: '',
+      type:'Vendor',
       page: this.p
     };
     this.getListFromServer(data);

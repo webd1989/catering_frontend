@@ -21,6 +21,8 @@ export class AddMenuComponent implements OnInit,OnDestroy {
   profilePic:any;
   menues:any = [];
   categories:any = [];
+  items:any = [];
+  itemIDs:any = [];
 
   constructor(
     private appService: ServiceService,
@@ -33,6 +35,53 @@ export class AddMenuComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.getCategories();
+    this.addMoreRow();
+  }
+  selectItem(event: any, id: number, counter: number) {
+
+  if (!this.itemIDs[counter]) {
+    this.itemIDs[counter] = [];
+  }
+
+  if (event.target.checked) {
+
+    // duplicate avoid
+    if (!this.itemIDs[counter].includes(id)) {
+      this.itemIDs[counter].push(id);
+    }
+
+  } else {
+
+    let index = this.itemIDs[counter].findIndex((x: number) => x === id);
+
+    if (index !== -1) {
+      this.itemIDs[counter].splice(index, 1);
+    }
+  }
+
+  this.menues[counter].menu_items = this.itemIDs[counter];
+}
+ removeRow(index:number){
+    this.menues.splice(index, 1);
+  }
+  setCateId(counter:number){
+    this.menues[counter].category_id = $('#category_id_'+counter).val();
+    this.menues[counter].menu_items = [];
+    this.itemIDs[counter] = [];
+    const data = {
+        token: localStorage.getItem('token'),
+        category_id:$('#category_id_'+counter).val()
+      };
+      this.appService.postData('item/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        var r:any=res;
+        if(r.success){
+          this.items[counter] = r.records;
+        }else{
+          
+        }
+      },error =>{
+       
+      });
   }
   getCategories(){
       const data = {
@@ -55,20 +104,15 @@ export class AddMenuComponent implements OnInit,OnDestroy {
       menu_items:''
      });
   }
-  UpdateProfile(){
+  Create(){
     $('#profileUpdateBtn').html('Processing...');
     const data = {
-      name:$('#name').val(),
-      phone:$('#phone').val(),
-      address:$('#address').val(),
-      city:$('#city').val(),
-      state:$('#state').val(),
-      country:$('#country').val(),
-      zipcode:$('#zipcode').val(),
+      title:$('#title').val(),
+      menu_item:this.menues
     };
-    this.appService.postData('profile/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('menu/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
-      $('#profileUpdateBtn').html('Update');
+      $('#profileUpdateBtn').html('Submit');
       if(r.success){
         this.toastr.success(r.message, 'Success');
       }else{
@@ -77,39 +121,7 @@ export class AddMenuComponent implements OnInit,OnDestroy {
     },error =>{
     });
   }
-  uploadDoc(){
-    $('#uploadBtn').html('Uploading...');
-    var file_data = $('#document').prop('files')[0];
-    var form  = new FormData();
-    form.append('token',localStorage.getItem('token') as string);
-    form.append('file',file_data);
-      this.appService.postData('profile/pic/upload',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-      var r:any=res;
-      $('#uploadBtn').html('Upload');
-      if(r.success){
-        $('#profile_pic').attr('src',r.file_path);
-        this.toastr.success(r.message, 'Success');
-      }else{
-        this.toastr.error(r.message, 'Error');
-      }
-      });
-  }
-  GetProfile(){
-    this.appService.getData('profile/get').pipe(takeUntil(this.destroy$)).subscribe(res=>{
-      var r:any=res;
-      if(r.success){
-        this.userData = r.user_date;
-      }else{
-        
-      }
-    },error =>{
-      Swal.fire(
-        'Error',
-        'Internal server error',
-        'error'
-      )
-    });
-  }
+
 
 }
 

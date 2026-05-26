@@ -24,17 +24,20 @@
                                     
                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/categories">Categories</a></li>
                                      <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/sub-categories">Sub-Categories</a></li> 
-                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/items">Menu Items</a></li> 
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/items">Menu Items</a></li>
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/units">Units</a></li> 
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/material-categories">Material Categories</a></li> 
                                 </ul>
                             </li>
-                            <!-- <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
+                            <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
                                 <a class="nav-link dropdown-toggle font-15 font-weight-400 active" href="javascript:;" data-bs-toggle="dropdown" aria-haspopup="true" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle text-main"></i> Users</a>
                                 <ul class="dropdown-menu shadow">
                                     
-                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/users">Users</a></li>
-                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/contacts">Clients</a></li> 
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/users">Employees</a></li>
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/contacts">Customers</a></li> 
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/vendors">Vendors</a></li> 
                                 </ul>
-                            </li> -->
+                            </li> 
                             
                             <li *ngIf="userType=='Admin'" class="nav-item d-menu">
                                 <a class="nav-link font-15 font-weight-400 active" routerLink="/menu-list"><i class="fas fa-bars text-main"></i> Menues</a>

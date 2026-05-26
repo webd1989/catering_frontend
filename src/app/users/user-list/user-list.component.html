@@ -28,8 +28,6 @@
                                         <th class="text-uppercase whitespace-nowrap">Name</th>
                                         <th class="text-uppercase whitespace-nowrap">Email Address</th>
                                         <th class="text-uppercase whitespace-nowrap">Phone</th>
-                                        <th class="text-uppercase whitespace-nowrap">Role</th>
-                                        <th class="text-uppercase whitespace-nowrap">Level</th>
                                         <th class="text-uppercase whitespace-nowrap">Status</th>
                                         <th class="text-uppercase whitespace-nowrap">Date</th>
                                         <th class="text-uppercase whitespace-nowrap">ACTION</th>
@@ -41,8 +39,6 @@
                                         <td class="whitespace-nowrap">{{user.name}}</td>
                                         <td class="whitespace-nowrap">{{user.email}}</td>
                                         <td class="whitespace-nowrap">{{user.phone}}</td>
-                                        <td class="whitespace-nowrap">{{user.designation}}</td>
-                                        <td class="whitespace-nowrap">{{user.level}}</td>
                                         <td>
                                             <a style="cursor:pointer" (click)="updateStatus(user.id,'2')" *ngIf="user.status == 1" class="btn btn-sm btn-outline-success text-uppercase text-center font-12 me-2">Active</a>
                                             <a style="cursor:pointer" (click)="updateStatus(user.id,'1')" *ngIf="user.status == 2" class="btn btn-sm btn-outline-danger text-uppercase text-center font-12 me-2">Inactive</a>
@@ -88,43 +84,36 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <form class="mt-0">
+                    <div class="row">
+                    <div class="col-lg-6">
                     <div class="input-group mb-3">
-                        <select class="form-control" id="level">
-                            <option value="">Level</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                    <span class="input-group-text font-12">Name</span>
+                    <input type="text" class="form-control" id="name" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="hidden" id="r_id">
                     </div>
+                    </div>
+                    <div class="col-lg-6">
                     <div class="input-group mb-3">
-                        <span class="input-group-text font-12">Name</span>
-                        <input type="text" class="form-control" id="name" aria-label="Username" aria-describedby="basic-addon1">
-                        <input type="hidden" id="r_id">
+                    <span class="input-group-text font-12">Phone</span>
+                    <input type="text" maxlength="10" id="phone" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text font-12">Phone</span>
-                        <input type="text" maxlength="10" id="phone" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Email</span>
                         <input type="text" id="email" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text font-12">Role</span>
-                        <input type="text" id="role" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
+                    <div class="col-lg-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Password</span>
                         <input type="text" id="password" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
+                    </div>
+                    </div>
                     
-                    <!-- <div class="input-group mb-3">
-                        <select class="form-control" id="f_city">
-                            <option value="">Facnchise City</option>
-                            <option *ngFor="let franch of franchise" value="{{franch.id}}">{{franch.name}}</option>
-                        </select>
-                    </div> -->
-                   
                     
                 </form>
 

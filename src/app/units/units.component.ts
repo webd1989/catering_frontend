@@ -1,6 +1,6 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 declare var $: any;
-import { ServiceService } from '../../services/service.service';
+import { ServiceService } from '../services/service.service';
 import { Router } from '@angular/router';
 import {from, noop, of, Subject} from 'rxjs';
 import {map, mergeAll, mergeMap, takeUntil} from 'rxjs/operators';
@@ -12,11 +12,11 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 @Component({
-  selector: 'app-menu-list',
-  templateUrl: './menu-list.component.html',
-  styleUrls: ['./menu-list.component.css']
+  selector: 'app-units',
+  templateUrl: './units.component.html',
+  styleUrls: ['./units.component.css']
 })
-export class MenuListComponent implements OnInit,OnDestroy {
+export class UnitsComponent implements OnInit,OnDestroy {
 
   users:any;
   p: number = 1;
@@ -24,8 +24,8 @@ export class MenuListComponent implements OnInit,OnDestroy {
   heading:any = '';
   action:any = '';
   selectedRow:any = [];
-  sub_categories:any = [];
-  categories:any = [];
+  customers:any = [];
+  quantities:any = [];
   quotationData:any;
   public SiteUrl = environment.documentUrl;
 
@@ -59,21 +59,69 @@ export class MenuListComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     this.getList();
   }
-
+ 
+  setHeading(){
+    this.action = 'Add';
+    this.heading = 'Create Unit';
+    this.cleanForm();
+  }
+  cleanForm(){
+    $('#r_id').val('');
+    $('#unit_name').val('');
+    $('#short_name').val('');
+  }
+  Create(){
+      $('#addUserBtn').html('Processing...');
+      const data = {
+        id:$('#r_id').val(),
+        unit_name:$('#unit_name').val(),
+        short_name:$('#short_name').val()
+      };
+      if(this.action == 'Add'){
+        this.appService.postData('unit/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+          var r:any=res;
+          $('#addUserBtn').html('Save');
+          if(r.success){
+            this.getList();
+            this.cleanForm();
+            this.toastr.success(r.message, 'Success');
+            $('#closeBtn').trigger('click');
+          }else{
+            this.toastr.error(r.message, 'Error');
+          }
+        },error =>{
+        });
+      }
+      if(this.action == 'Edit'){
+        this.appService.postData('unit/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+          var r:any=res;
+          $('#addUserBtn').html('Save');
+          if(r.success){
+            this.getList();
+           this.cleanForm();
+            this.toastr.success(r.message, 'Success');
+            $('#closeBtn').trigger('click');
+          }else{
+            this.toastr.error(r.message, 'Error');
+          }
+        },error =>{
+        });
+      }
+      
+    }
 
   getList(){
     const data = {
       token: localStorage.getItem('token'),
       title_search: $("#title_search").val(),
       status_search: $("#status_search").val(),
-      category_id: $("#search_category_id").val(),
-      sub_category_id: $("#search_sub_category_id").val(),
+      type:'Category',
       page: this.p
     };
     this.getListFromServer(data);
   }
   getListFromServer(form:any){
-    this.appService.postData('menu/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('unit/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.users = r.users.data;
       this.total = r.users.total;
@@ -119,21 +167,40 @@ export class MenuListComponent implements OnInit,OnDestroy {
   }
   updateStatus(userID:string,status:string){
     const data = {};
-    this.appService.putData('menu/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.putData('unit/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.getList();
     },error=>{
       this.toastr.error("Server Error","Error");
     });
   }
-
+  getQuotation(id:number){
+      this.heading = 'Edit Unit';
+      this.action = 'Edit';
+      const data = {
+        token: localStorage.getItem('token'),
+        id: id
+      };
+      this.appService.postData('unit/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        var r:any=res;
+        if(r.success){
+          this.quotationData = r.user;
+          $('#r_id').val(r.user.id);
+          $('#unit_name').val(r.user.unit_name);
+          $('#short_name').val(r.user.short_name);
+        }else{
+          
+        }
+      },error =>{
+       
+      });
+  }
   searchData(){
     const data = {
       token: localStorage.getItem('token'),
       title_search: $("#title_search").val(),
       status_search: $("#status_search").val(),
-      category_id: $("#search_category_id").val(),
-      sub_category_id: $("#search_sub_category_id").val(),
+      type:'Category',
       page: this.p
     };
     this.getListFromServer(data);
@@ -141,14 +208,10 @@ export class MenuListComponent implements OnInit,OnDestroy {
   reset(){
     $("#title_search").val('');
     $("#status_search").val('');
-    $("#search_category_id").val('');
-    $("#search_sub_category_id").val('');
     const data = {
       token: localStorage.getItem('token'),
       search_key: '',
-      status_search:'',
-      category_id:'',
-      sub_category_id:'',
+      type:'Category',
       page: 1
     };
     this.getListFromServer(data);
@@ -158,4 +221,5 @@ export class MenuListComponent implements OnInit,OnDestroy {
   }
 
 }
+
 

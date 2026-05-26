@@ -31,6 +31,9 @@ import { ItemsComponent } from './items/items.component';
 import { MenuListComponent } from './menues/menu-list/menu-list.component';
 import { AddMenuComponent } from './menues/add-menu/add-menu.component';
 import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
+import { VendorsComponent } from './vendors/vendors.component';
+import { UnitsComponent } from './units/units.component';
+import { MaterialCategoriesComponent } from './material-categories/material-categories.component';
 
 
 
@@ -57,7 +60,10 @@ import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
     ItemsComponent,
     MenuListComponent,
     AddMenuComponent,
-    EditMenuComponent
+    EditMenuComponent,
+    VendorsComponent,
+    UnitsComponent,
+    MaterialCategoriesComponent
   ],
   imports: [
     BrowserModule,
