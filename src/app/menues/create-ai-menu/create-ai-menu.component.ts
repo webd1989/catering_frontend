@@ -9,11 +9,11 @@ import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-add-menu',
-  templateUrl: './add-menu.component.html',
-  styleUrls: ['./add-menu.component.css']
+  selector: 'app-create-ai-menu',
+  templateUrl: './create-ai-menu.component.html',
+  styleUrls: ['./create-ai-menu.component.css']
 })
-export class AddMenuComponent implements OnInit,OnDestroy {
+export class CreateAiMenuComponent implements OnInit,OnDestroy {
 
   destroy$ = new Subject();
   fiePath = environment.documentUrl;
@@ -66,22 +66,9 @@ export class AddMenuComponent implements OnInit,OnDestroy {
   }
   setCateId(counter:number){
     this.menues[counter].category_id = $('#category_id_'+counter).val();
-    this.menues[counter].menu_items = [];
-    this.itemIDs[counter] = [];
-    const data = {
-        token: localStorage.getItem('token'),
-        category_id:$('#category_id_'+counter).val()
-      };
-      this.appService.postData('item/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          this.items[counter] = r.records;
-        }else{
-          
-        }
-      },error =>{
-       
-      });
+  }
+  setNoOfItem(counter:number){
+    this.menues[counter].no_of_item = $('#no_of_item_'+counter).val();
   }
   getCategories(){
       const data = {
@@ -101,7 +88,7 @@ export class AddMenuComponent implements OnInit,OnDestroy {
   addMoreRow(){
     this.menues.push({ 
       category_id: '',
-      menu_items:''
+      no_of_item:0
      });
   }
   Create(){
@@ -116,7 +103,7 @@ export class AddMenuComponent implements OnInit,OnDestroy {
       description:$('#description').val(),
       menu_item:this.menues
     };
-    this.appService.postData('menu/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('menu/create/ai',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       $('#profileUpdateBtn').html('Submit');
       if(r.success){

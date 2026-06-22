@@ -149,15 +149,21 @@ if (arraySet.includes(id)) {
      });
   }
   Update(){
-    $('#profileUpdateBtn').html('Processing...');
+    $('.profileUpdateBtn').html('Processing...');
     const data = {
       title:$('#title').val(),
+      customer_name:$('#customer_name').val(),
+      customer_phone:$('#customer_phone').val(),
+      function_date:$('#function_date').val(),
+      location:$('#location').val(),
+      no_of_guest:$('#no_of_guest').val(),
+      description:$('#description').val(),
       menu_item:this.menues,
       id:this.rowID
     };
     this.appService.postData('menu/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
-      $('#profileUpdateBtn').html('Submit');
+      $('.profileUpdateBtn').html('Submit');
       if(r.success){
         this.getRowData();
         this.toastr.success(r.message, 'Success');

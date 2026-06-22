@@ -23,6 +23,18 @@ import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
 import { VendorsComponent } from './vendors/vendors.component';
 import { UnitsComponent } from './units/units.component';
 import { MaterialCategoriesComponent } from './material-categories/material-categories.component';
+import { RawMaterialComponent } from './raw-material/raw-material.component';
+import { MenuItemDetailsComponent } from './menu-item-details/menu-item-details.component';
+import { CreateAiMenuComponent } from './menues/create-ai-menu/create-ai-menu.component';
+import { BookingListComponent } from './bookings/booking-list/booking-list.component';
+import { CreateBookingComponent } from './bookings/create-booking/create-booking.component';
+import { EventTypesComponent } from './event-types/event-types.component';
+import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
+import { AddPurchaseComponent } from './purchase/add-purchase/add-purchase.component';
+import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.component';
+import { EquipmentCategoriesComponent } from './equipment-categories/equipment-categories.component';
+import { EquipmentsComponent } from './equipments/equipments.component';
+import { RolesComponent } from './roles/roles.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -45,6 +57,18 @@ const routes: Routes = [
   {path:'vendors',component:VendorsComponent},
   {path:'units',component:UnitsComponent},
   {path:'material-categories',component:MaterialCategoriesComponent},
+  {path:'raw-material',component:RawMaterialComponent},
+  {path:'menu-item-details/:id',component:MenuItemDetailsComponent},
+  {path:'create-menu',component:CreateAiMenuComponent},
+  {path:'booking-list',component:BookingListComponent},
+  {path:'create-booking',component:CreateBookingComponent},
+  {path:'event-types',component:EventTypesComponent},
+  {path:'purchase-list',component:PurchaseListComponent},
+  {path:'add-purchase',component:AddPurchaseComponent},
+  {path:'edit-purchase/:id',component:EditPurchaseComponent},
+  {path:'equipment-categories',component:EquipmentCategoriesComponent},
+  {path:'equipments',component:EquipmentsComponent},
+  {path:'roles',component:RolesComponent}
 ];
 
 @NgModule({

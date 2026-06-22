@@ -12,11 +12,11 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 @Component({
-  selector: 'app-items',
-  templateUrl: './items.component.html',
-  styleUrls: ['./items.component.css']
+  selector: 'app-raw-material',
+  templateUrl: './raw-material.component.html',
+  styleUrls: ['./raw-material.component.css']
 })
-export class ItemsComponent implements OnInit,OnDestroy {
+export class RawMaterialComponent implements OnInit,OnDestroy {
 
   users:any;
   p: number = 1;
@@ -24,8 +24,9 @@ export class ItemsComponent implements OnInit,OnDestroy {
   heading:any = '';
   action:any = '';
   selectedRow:any = [];
-  sub_categories:any = [];
+  customers:any = [];
   categories:any = [];
+  units:any = [];
   quotationData:any;
   public SiteUrl = environment.documentUrl;
 
@@ -58,69 +59,62 @@ export class ItemsComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.getList();
-    this.getCategories();
+    this.getCategory();
+    this.getUnit();
   }
- 
+ getCategory(){
+    const data = {
+      token: localStorage.getItem('token')
+    };
+    this.appService.postData('material-category/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
+      if(r.success){
+        this.categories = r.records;
+      }else{
+        this.toastr.error(r.message, 'Error');
+      }
+    },error =>{
+    });
+ }
+ getUnit(){
+    const data = {
+      token: localStorage.getItem('token')
+    };
+    this.appService.postData('unit/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
+      if(r.success){
+        this.units = r.records;
+      }else{
+        this.toastr.error(r.message, 'Error');
+      }
+    },error =>{
+    });
+ }
   setHeading(){
     this.action = 'Add';
-    this.heading = 'Create Menu Item';
-    this.sub_categories=[];
+    this.heading = 'Create Raw Material';
     this.cleanForm();
   }
   cleanForm(){
     $('#r_id').val('');
-    $('#description').val('');
-    $('#title').val('');
-  }
-  getCategories(){
-      const data = {
-        token: localStorage.getItem('token'),
-      };
-      this.appService.postData('category/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          this.categories = r.records;
-        }else{
-          
-        }
-      },error =>{
-       
-      });
-  }
-  getSubCategory(type:string){
-    if(type == 'Form'){
-        var category_id = $('#category_id').val();
-    }else{
-        var category_id = $('#search_category_id').val();
-    }
-    
-      const data = {
-        token: localStorage.getItem('token'),
-        category_id:category_id
-      };
-      this.appService.postData('subcategory/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          this.sub_categories = r.records;
-        }else{
-          
-        }
-      },error =>{
-       
-      });
+    $('#category_id').val('');
+    $('#material_name').val('');
+    $('#unit_id').val('');
+    $('#current_stock').val('');
+    $('#purchase_rate').val('');
   }
   Create(){
       $('#addUserBtn').html('Processing...');
       const data = {
         id:$('#r_id').val(),
-        description:$('#description').val(),
-        title:$('#title').val(),
         category_id:$('#category_id').val(),
-        sub_category_id:$('#sub_category_id').val(),
-        per_person_price:$('#per_person_price').val()
+        material_name:$('#material_name').val(),
+        unit_id:$('#unit_id').val(),
+        current_stock:$('#current_stock').val(),
+        purchase_rate:$('#purchase_rate').val()
       };
       if(this.action == 'Add'){
-        this.appService.postData('item/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        this.appService.postData('row-material/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
           var r:any=res;
           $('#addUserBtn').html('Save');
           if(r.success){
@@ -135,7 +129,7 @@ export class ItemsComponent implements OnInit,OnDestroy {
         });
       }
       if(this.action == 'Edit'){
-        this.appService.postData('item/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        this.appService.postData('row-material/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
           var r:any=res;
           $('#addUserBtn').html('Save');
           if(r.success){
@@ -157,14 +151,13 @@ export class ItemsComponent implements OnInit,OnDestroy {
       token: localStorage.getItem('token'),
       title_search: $("#title_search").val(),
       status_search: $("#status_search").val(),
-      category_id: $("#search_category_id").val(),
-      sub_category_id: $("#search_sub_category_id").val(),
+      category_search: $("#category_search").val(),
       page: this.p
     };
     this.getListFromServer(data);
   }
   getListFromServer(form:any){
-    this.appService.postData('item/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('row-material/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.users = r.users.data;
       this.total = r.users.total;
@@ -210,7 +203,7 @@ export class ItemsComponent implements OnInit,OnDestroy {
   }
   updateStatus(userID:string,status:string){
     const data = {};
-    this.appService.putData('item/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.putData('row-material/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.getList();
     },error=>{
@@ -218,21 +211,22 @@ export class ItemsComponent implements OnInit,OnDestroy {
     });
   }
   getQuotation(id:number){
-      this.heading = 'Edit Menu Item';
+      this.heading = 'Edit Raw Material';
       this.action = 'Edit';
       const data = {
         token: localStorage.getItem('token'),
         id: id
       };
-      this.appService.postData('item/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      this.appService.postData('row-material/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
         var r:any=res;
         if(r.success){
           this.quotationData = r.user;
-          this.sub_categories = r.user.sub_categories;
           $('#r_id').val(r.user.id);
-          $('#title').val(r.user.title);
-          $('#description').val(r.user.description);
-          $('#per_person_price').val(r.user.per_person_price);
+          $('#category_id').val(r.user.category_id);
+          $('#material_name').val(r.user.material_name);
+          $('#unit_id').val(r.user.unit_id);
+          $('#current_stock').val(r.user.current_stock);
+          $('#purchase_rate').val(r.user.purchase_rate);
         }else{
           
         }
@@ -245,8 +239,7 @@ export class ItemsComponent implements OnInit,OnDestroy {
       token: localStorage.getItem('token'),
       title_search: $("#title_search").val(),
       status_search: $("#status_search").val(),
-      category_id: $("#search_category_id").val(),
-      sub_category_id: $("#search_sub_category_id").val(),
+      category_search: $("#category_search").val(),
       page: this.p
     };
     this.getListFromServer(data);
@@ -254,14 +247,12 @@ export class ItemsComponent implements OnInit,OnDestroy {
   reset(){
     $("#title_search").val('');
     $("#status_search").val('');
-    $("#search_category_id").val('');
-    $("#search_sub_category_id").val('');
+    $("#category_search").val('');
     const data = {
       token: localStorage.getItem('token'),
-      search_key: '',
+      title_search: '',
+      category_search:'',
       status_search:'',
-      category_id:'',
-      sub_category_id:'',
       page: 1
     };
     this.getListFromServer(data);
@@ -271,4 +262,5 @@ export class ItemsComponent implements OnInit,OnDestroy {
   }
 
 }
+
 

@@ -10,23 +10,19 @@
             <div class="main-area position-relative">
                 <div class="page-card-title align-items-center justify-content-between">
                      <div class="row">
+                        
                         <div class="col-lg-2 col-6 mb-2">
-                            <input type="text" name="title_search" id="title_search" class="form-control filter-p" placeholder="Title">
+                        <select  class="form-select" id="search_supplier_id">
+                        <option value="">Vendor</option>
+                        <option  *ngFor="let vendor of vendors" value="{{vendor?.id}}">{{vendor?.company}} - {{vendor?.name}}</option>
+                     </select>
                         </div>
-
-                        <div class="col-lg-2 col-6 mb-2">
-                        <select name="status_search" id="status_search" class="form-select">
-                        <option value="">Status</option>
-                        <option value="1">Active</option>
-                        <option value="2">Inactive</option>
-                        </select>
-                        </div>
+                       
                         
                         <div class="col-lg-2 col-6 mb-2">
 <a (click)="searchData();" id="" class="btn btn-warning btn-sm text-uppercase"><i class="fas fa-search"></i></a>
                             <a (click)="reset();" style="margin-left: 10px;"  class="btn btn-primary btn-sm text-uppercase" title="Reset"><i class="fas fa-retweet"></i></a>
-                            <a routerLink="/add-menu" style="margin-left: 10px;"  class="btn btn-warning btn-sm text-uppercase" title="Create Invoice"><i class="fas fa-plus"></i></a>
-                            <a routerLink="/create-menu" style="margin-left: 10px;"  class="btn btn-warning btn-sm text-uppercase" title="Create Invoice"><i class="fas fa-robot"></i></a>
+                            <a routerLink="/add-purchase" style="margin-left: 10px;"  class="btn btn-warning btn-sm text-uppercase" title="Create Purchase"><i class="fas fa-plus"></i></a>
                         </div>
                     </div>
                     
@@ -37,12 +33,12 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase whitespace-nowrap">S.NO</th>
-                                        <th class="text-uppercase whitespace-nowrap">Menu Title</th>
-                                        <th class="text-uppercase whitespace-nowrap">Customer Name</th>
-                                        <th class="text-uppercase whitespace-nowrap">Customer Phone</th>
-                                        <th class="text-uppercase whitespace-nowrap">Event Date</th>
-                                        <th class="text-uppercase whitespace-nowrap">No of Guest</th>
-                                        <th class="text-uppercase whitespace-nowrap">Location</th>
+                                        <th class="text-uppercase whitespace-nowrap">Vendor</th>
+                                        <th class="text-uppercase whitespace-nowrap">Invoice No</th>
+                                        <th class="text-uppercase whitespace-nowrap">Purchase Date</th>
+                                        <th class="text-uppercase whitespace-nowrap">Sub Total</th>
+                                        <th class="text-uppercase whitespace-nowrap">GST</th>
+                                        <th class="text-uppercase whitespace-nowrap">Total</th>
                                         <th class="text-uppercase whitespace-nowrap">Created Date</th>
                                         <th class="text-uppercase whitespace-nowrap">Action</th>
                                     </tr>
@@ -52,16 +48,16 @@
                                         <td class="whitespace-nowrap">{{i+1}}</td>
                                       
                                 
-                                        <td class="whitespace-nowrap">{{user?.title}}</td>
-                                        <td class="whitespace-nowrap">{{user?.customer_name}}</td>
-                                        <td class="whitespace-nowrap">{{user?.customer_phone}}</td>
-                                        <td class="whitespace-nowrap">{{user?.function_date}}</td>
-                                        <td class="whitespace-nowrap">{{user?.no_of_guest}}</td>
-                                        <td class="whitespace-nowrap">{{user?.location}}</td>
-                                        
+                                        <td class="whitespace-nowrap">{{user?.vendor_name}}</td>
+                                        <td class="whitespace-nowrap">{{user?.invoice_no}}</td>
+                                        <td class="whitespace-nowrap">{{user?.display_purchase_date}}</td>
+                                       
+                                        <td class="text-capitalize whitespace-nowrap">{{user?.subtotal}}</td>
+                                        <td class="text-capitalize whitespace-nowrap">{{user?.gst_amount}}</td>
+                                        <td class="text-capitalize whitespace-nowrap">{{user?.total_amount}}</td>
                                         <td class="text-capitalize whitespace-nowrap">{{user?.display_date}}</td>
                                         <td class="text-capitalize whitespace-nowrap">
-                                            <a routerLink="/edit-menu/{{user?.id}}" class="text-capitalize font-12 text-info me-3">
+                                            <a routerLink="/edit-purchase/{{user?.id}}" data-bs-toggle="modal" data-bs-target="#createTemplate" class="text-capitalize font-12 text-info me-3">
                                                 <i class="far fa-edit"></i>
                                             </a>
                                             <a href="javascript:;" (click)="Delete(user.id)" class="text-capitalize font-12 text-red" data-bs-toggle="modal" data-bs-target="#deleteTemplate">
@@ -85,4 +81,5 @@
         <app-footer></app-footer>
     </div>
 </main>
+
 

@@ -12,11 +12,11 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 
 @Component({
-  selector: 'app-items',
-  templateUrl: './items.component.html',
-  styleUrls: ['./items.component.css']
+  selector: 'app-event-types',
+  templateUrl: './event-types.component.html',
+  styleUrls: ['./event-types.component.css']
 })
-export class ItemsComponent implements OnInit,OnDestroy {
+export class EventTypesComponent implements OnInit,OnDestroy {
 
   users:any;
   p: number = 1;
@@ -24,8 +24,8 @@ export class ItemsComponent implements OnInit,OnDestroy {
   heading:any = '';
   action:any = '';
   selectedRow:any = [];
-  sub_categories:any = [];
-  categories:any = [];
+  customers:any = [];
+  quantities:any = [];
   quotationData:any;
   public SiteUrl = environment.documentUrl;
 
@@ -58,13 +58,11 @@ export class ItemsComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     this.getList();
-    this.getCategories();
   }
  
   setHeading(){
     this.action = 'Add';
-    this.heading = 'Create Menu Item';
-    this.sub_categories=[];
+    this.heading = 'Create Event Type';
     this.cleanForm();
   }
   cleanForm(){
@@ -72,55 +70,15 @@ export class ItemsComponent implements OnInit,OnDestroy {
     $('#description').val('');
     $('#title').val('');
   }
-  getCategories(){
-      const data = {
-        token: localStorage.getItem('token'),
-      };
-      this.appService.postData('category/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          this.categories = r.records;
-        }else{
-          
-        }
-      },error =>{
-       
-      });
-  }
-  getSubCategory(type:string){
-    if(type == 'Form'){
-        var category_id = $('#category_id').val();
-    }else{
-        var category_id = $('#search_category_id').val();
-    }
-    
-      const data = {
-        token: localStorage.getItem('token'),
-        category_id:category_id
-      };
-      this.appService.postData('subcategory/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-        var r:any=res;
-        if(r.success){
-          this.sub_categories = r.records;
-        }else{
-          
-        }
-      },error =>{
-       
-      });
-  }
   Create(){
       $('#addUserBtn').html('Processing...');
       const data = {
         id:$('#r_id').val(),
         description:$('#description').val(),
-        title:$('#title').val(),
-        category_id:$('#category_id').val(),
-        sub_category_id:$('#sub_category_id').val(),
-        per_person_price:$('#per_person_price').val()
+        title:$('#title').val()
       };
       if(this.action == 'Add'){
-        this.appService.postData('item/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        this.appService.postData('event-type/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
           var r:any=res;
           $('#addUserBtn').html('Save');
           if(r.success){
@@ -135,7 +93,7 @@ export class ItemsComponent implements OnInit,OnDestroy {
         });
       }
       if(this.action == 'Edit'){
-        this.appService.postData('item/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+        this.appService.postData('event-type/update',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
           var r:any=res;
           $('#addUserBtn').html('Save');
           if(r.success){
@@ -157,14 +115,12 @@ export class ItemsComponent implements OnInit,OnDestroy {
       token: localStorage.getItem('token'),
       title_search: $("#title_search").val(),
       status_search: $("#status_search").val(),
-      category_id: $("#search_category_id").val(),
-      sub_category_id: $("#search_sub_category_id").val(),
       page: this.p
     };
     this.getListFromServer(data);
   }
   getListFromServer(form:any){
-    this.appService.postData('item/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.postData('event-type/list',form).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.users = r.users.data;
       this.total = r.users.total;
@@ -210,7 +166,7 @@ export class ItemsComponent implements OnInit,OnDestroy {
   }
   updateStatus(userID:string,status:string){
     const data = {};
-    this.appService.putData('item/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+    this.appService.putData('event-type/status/update/'+userID+'/'+status,data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
       this.getList();
     },error=>{
@@ -218,21 +174,19 @@ export class ItemsComponent implements OnInit,OnDestroy {
     });
   }
   getQuotation(id:number){
-      this.heading = 'Edit Menu Item';
+      this.heading = 'Edit Event Type';
       this.action = 'Edit';
       const data = {
         token: localStorage.getItem('token'),
         id: id
       };
-      this.appService.postData('item/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      this.appService.postData('event-type/get',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
         var r:any=res;
         if(r.success){
           this.quotationData = r.user;
-          this.sub_categories = r.user.sub_categories;
           $('#r_id').val(r.user.id);
           $('#title').val(r.user.title);
           $('#description').val(r.user.description);
-          $('#per_person_price').val(r.user.per_person_price);
         }else{
           
         }
@@ -245,8 +199,6 @@ export class ItemsComponent implements OnInit,OnDestroy {
       token: localStorage.getItem('token'),
       title_search: $("#title_search").val(),
       status_search: $("#status_search").val(),
-      category_id: $("#search_category_id").val(),
-      sub_category_id: $("#search_sub_category_id").val(),
       page: this.p
     };
     this.getListFromServer(data);
@@ -254,14 +206,9 @@ export class ItemsComponent implements OnInit,OnDestroy {
   reset(){
     $("#title_search").val('');
     $("#status_search").val('');
-    $("#search_category_id").val('');
-    $("#search_sub_category_id").val('');
     const data = {
       token: localStorage.getItem('token'),
       search_key: '',
-      status_search:'',
-      category_id:'',
-      sub_category_id:'',
       page: 1
     };
     this.getListFromServer(data);

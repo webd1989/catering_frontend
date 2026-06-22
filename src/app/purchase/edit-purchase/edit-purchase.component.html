@@ -1,0 +1,143 @@
+<main>
+    <div class="main-wrapper">
+        <!-- Page Content :: Start  -->
+        <div id="content">
+            <!-- Top Bar :: Start -->
+            <app-header></app-header>
+            <!-- Top Bar :: End -->
+
+<div class="mainTabss">
+    <app-tabs></app-tabs>
+     <div class="main-area position-relative">
+                
+                <div class="page-card-body p-20">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-20">
+                                <div class="card border-radius-10 mb-4 main-bg-color">
+                                    <div class="card-body p-20">
+                                        
+                                        <a (click)="getRowData()">AA2</a>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+<div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">Vendor</label>
+                                                <select class="form-select" id="supplier_id">
+                                                    <option value="">Select Vendor</option>
+                                                    <option  *ngFor="let vendor of vendors" [selected]="rowData?.supplier_id == vendor?.id" value="{{vendor?.id}}">{{vendor?.company}} - {{vendor?.name}}</option>
+                                                </select>
+                                            </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                               <div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">Invoive No</label>
+                                                <input type="text" value="{{rowData?.invoice_no}}"  id="invoice_no" class="form-control">
+                                            </div> 
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">Purchase Date</label>
+                                                <input type="date" value="{{rowData?.purchase_date}}"  id="purchase_date" class="form-control">
+                                            </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                               <div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">Sub Total</label>
+                                                <input type="text" value="{{rowData?.subtotal}}"  id="subtotal" class="form-control">
+                                            </div> 
+                                            </div>
+                                            <div class="col-lg-4">
+                                               <div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">GST</label>
+                                                <input type="text" value="{{rowData?.gst_amount}}" id="gst_amount" class="form-control">
+                                            </div> 
+                                            </div>
+                                            <div class="col-lg-4">
+                                               <div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">Total Amt</label>
+                                                <input type="text" value="{{rowData?.total_amount}}" id="total_amount" class="form-control">
+                                            </div> 
+                                            </div>
+                                            <div class="col-lg-12">
+                                               <div class="form-group">
+                                                <label class="text-uppercase font-weight-400 font-12 mb-10">Remarks</label>
+                                                <textarea rows="5" id="remarks" class="form-control">{{rowData?.remarks}}</textarea>
+                                            </div>  
+                                            </div>
+                                        </div>
+                                        
+                                       <div *ngFor="let ingredient of ingredients; index as i" class="row">
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                <select class="form-select" (change)="getRawMaterialList(i)"  [id]="'category_'+i">
+                                                <option value="">Category</option>
+                                                <option *ngFor="let category of categories" [selected]="ingredient?.material_category_id == category?.id" value="{{category?.id}}">{{category?.title}}</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                <select class="form-select" (change)="setMaterialId(i)" [id]="'material_'+i">
+                                                <option value="">Material</option>
+                                                <option *ngFor="let material of materials[i]" [selected]="ingredient?.raw_material_id == material?.id" value="{{material?.id}}">{{material?.material_name}}</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <div class="form-group">
+                                                <input class="form-control" value="{{ingredient?.qty}}" (blur)="setQty(i)" placeholder="Qty" [id]="'qty_'+i" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <div class="form-group">
+                                                <select class="form-select" (change)="setUnit(i)" [id]="'unit_'+i">
+                                                <option value="">Unit</option>
+                                                <option *ngFor="let unit of units" [selected]="ingredient?.unit == unit?.short_name" value="{{unit?.short_name}}">{{unit?.unit_name}}</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <div class="form-group">
+                                                <input class="form-control" value="{{ingredient?.rate}}" (blur)="setRate(i)" placeholder="Rate" [id]="'rate_'+i" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                <input class="form-control" value="{{ingredient?.total}}" placeholder="Total" [id]="'total_'+i" type="text">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-1">
+                                                <a href="javascript:;" (click)="removeRow(i)" title="Remove" class="btn btn-danger btn-sm text-uppercase" style="margin-left: 10px;"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12" style="text-align: right;">
+                                                <a (click)="addMoreRow()" title="Add More" class="btn btn-primary btn-sm text-uppercase"><i class="fas fa-plus"></i></a>
+                                            </div>
+                                        </div>    
+                                            
+                                             
+
+                                        <a type="button" (click)="Update()" id="profileUpdateBtn" class="btn btn-primary btn-sm text-uppercase mt-5">Submit</a>&nbsp;<a routerLink="/items"  class="btn btn-primary btn-sm text-uppercase mt-5">Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                         <!-- {{this.ingredients | json}}  -->
+                        
+                    </div>
+                    
+                </div>
+            </div>
+</div>
+            <!-- main Area :: Start -->
+           
+            <!--Footer :: Start-->
+        </div>
+        <!-- Page Content :: End -->
+        <app-footer></app-footer>
+        <!--Footer :: End-->
+    </div>
+</main>

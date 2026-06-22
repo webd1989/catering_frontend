@@ -34,6 +34,18 @@ import { EditMenuComponent } from './menues/edit-menu/edit-menu.component';
 import { VendorsComponent } from './vendors/vendors.component';
 import { UnitsComponent } from './units/units.component';
 import { MaterialCategoriesComponent } from './material-categories/material-categories.component';
+import { RawMaterialComponent } from './raw-material/raw-material.component';
+import { MenuItemDetailsComponent } from './menu-item-details/menu-item-details.component';
+import { CreateAiMenuComponent } from './menues/create-ai-menu/create-ai-menu.component';
+import { BookingListComponent } from './bookings/booking-list/booking-list.component';
+import { CreateBookingComponent } from './bookings/create-booking/create-booking.component';
+import { EventTypesComponent } from './event-types/event-types.component';
+import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
+import { AddPurchaseComponent } from './purchase/add-purchase/add-purchase.component';
+import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.component';
+import { EquipmentCategoriesComponent } from './equipment-categories/equipment-categories.component';
+import { EquipmentsComponent } from './equipments/equipments.component';
+import { RolesComponent } from './roles/roles.component';
 
 
 
@@ -63,7 +75,19 @@ import { MaterialCategoriesComponent } from './material-categories/material-cate
     EditMenuComponent,
     VendorsComponent,
     UnitsComponent,
-    MaterialCategoriesComponent
+    MaterialCategoriesComponent,
+    RawMaterialComponent,
+    MenuItemDetailsComponent,
+    CreateAiMenuComponent,
+    BookingListComponent,
+    CreateBookingComponent,
+    EventTypesComponent,
+    PurchaseListComponent,
+    AddPurchaseComponent,
+    EditPurchaseComponent,
+    EquipmentCategoriesComponent,
+    EquipmentsComponent,
+    RolesComponent
   ],
   imports: [
     BrowserModule,
