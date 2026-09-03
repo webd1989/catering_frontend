@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit,OnDestroy {
         localStorage.setItem('user_contact', r.details.phone);
         localStorage.setItem('user_type', r.details.type);
         localStorage.setItem('user_level', r.details.level);
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigateByUrl('/booking-calender');
       }else{
         Swal.fire(
           'Error',

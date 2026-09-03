@@ -1,263 +1,296 @@
-<div class="calendar-container">
+<main>
+    <div class="main-wrapper">
+        <!-- Page Content :: Start  -->
+        <div id="content">
+            <!-- Top Bar :: Start -->
+           <app-header></app-header>
+            <!-- Top Bar :: End -->
 
-    <!-- Calendar Header -->
-    <div class="calendar-header">
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <!-- main Area :: Start -->
+                <div class="main-area position-relative">
+                    <div class="tab-content" id="myTabsContent">
+                        <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab2-tab">
+                           
+                            <div class="page-card-body p-20">
+                                <a (click)="getBookingsFromDb()">aa</a>
+                                <div class="calendar-container">
 
-        <div class="calendar-title">
-
-            <button
-                class="nav-btn"
-                (click)="previousMonth()">
-                &#10094;
-            </button>
-
-            <h2>
-                {{ currentMonthName }} {{ currentYear }}
-            </h2>
-
-            <button
-                class="nav-btn"
-                (click)="nextMonth()">
-                &#10095;
-            </button>
-
-        </div>
-
-        <button
-            class="today-btn"
-            (click)="goToToday()">
-            Today
-        </button>
-
-    </div>
-
-
-    <!-- Calendar -->
-    <div class="calendar">
-
-        <!-- Week Header -->
-        <div class="week-header">
-
-            <div class="week-day">
-                Sun
-            </div>
-
-            <div class="week-day">
-                Mon
-            </div>
-
-            <div class="week-day">
-                Tue
-            </div>
-
-            <div class="week-day">
-                Wed
-            </div>
-
-            <div class="week-day">
-                Thu
-            </div>
-
-            <div class="week-day">
-                Fri
-            </div>
-
-            <div class="week-day">
-                Sat
-            </div>
-
-        </div>
-
-
-        <!-- Calendar Weeks -->
-        <div
-            class="calendar-week"
-            *ngFor="let week of weeks">
-
-            <!-- Calendar Day -->
-            <div
-                class="calendar-day"
-                [class.other-month]="!day.currentMonth"
-                [class.today]="day.today"
-                *ngFor="let day of week"
-                (click)="dateClick(day)">
-
-                <!-- Date Number -->
-                <div class="date-number">
-
-                    {{ day.day }}
-
-                </div>
-
-
-                <!-- Bookings -->
-                <div class="booking-list">
-
-                    <div
-                        class="booking"
-                        *ngFor="let booking of day.bookings"
-                        [ngClass]="getStatusClass(booking.status)"
-                        (click)="bookingClick(booking, $event)">
-
-                        <div class="booking-title">
-                            {{ booking.title }}
+                                    <!-- Calendar Header -->
+                                    <div class="calendar-header">
+                                
+                                        <div class="calendar-title">
+                                
+                                            <button
+                                                class="nav-btn"
+                                                (click)="previousMonth()">
+                                                &#10094;
+                                            </button>
+                                
+                                            <h2>
+                                                {{ currentMonthName }} {{ currentYear }}
+                                            </h2>
+                                
+                                            <button
+                                                class="nav-btn"
+                                                (click)="nextMonth()">
+                                                &#10095;
+                                            </button>
+                                
+                                        </div>
+                                
+                                        <button
+                                            class="today-btn"
+                                            (click)="goToToday()">
+                                            Today
+                                        </button>
+                                
+                                    </div>
+                                
+                                
+                                    <!-- Calendar -->
+                                    <div class="calendar">
+                                
+                                        <!-- Week Header -->
+                                        <div class="week-header">
+                                
+                                            <div class="week-day">
+                                                Sun
+                                            </div>
+                                
+                                            <div class="week-day">
+                                                Mon
+                                            </div>
+                                
+                                            <div class="week-day">
+                                                Tue
+                                            </div>
+                                
+                                            <div class="week-day">
+                                                Wed
+                                            </div>
+                                
+                                            <div class="week-day">
+                                                Thu
+                                            </div>
+                                
+                                            <div class="week-day">
+                                                Fri
+                                            </div>
+                                
+                                            <div class="week-day">
+                                                Sat
+                                            </div>
+                                
+                                        </div>
+                                
+                                
+                                        <!-- Calendar Weeks -->
+                                        <div
+                                            class="calendar-week"
+                                            *ngFor="let week of weeks">
+                                
+                                            <!-- Calendar Day -->
+                                            <div
+                                                class="calendar-day"
+                                                [class.other-month]="!day.currentMonth"
+                                                [class.today]="day.today"
+                                                *ngFor="let day of week"
+                                                (click)="dateClick(day)">
+                                
+                                                <!-- Date Number -->
+                                                <div class="date-number">
+                                
+                                                    {{ day.day }}
+                                
+                                                </div>
+                                
+                                
+                                                <!-- Bookings -->
+                                                <div class="booking-list">
+                                
+                                                    <div
+                                                        class="booking"
+                                                        *ngFor="let booking of day.bookings"
+                                                        [ngClass]="getStatusClass(booking.status)"
+                                                        (click)="bookingClick(booking, $event)">
+                                
+                                                        <div class="booking-title">
+                                                            {{ booking.title }}
+                                                        </div>
+                                
+                                                        <div
+                                                            class="booking-time"
+                                                            *ngIf="booking.start_time">
+                                
+                                                            {{ booking.start_time }}
+                                
+                                                        </div>
+                                
+                                                    </div>
+                                
+                                                </div>
+                                
+                                            </div>
+                                
+                                        </div>
+                                
+                                    </div>
+                                
+                                
+                                    <!-- Legend -->
+                                    <div class="calendar-legend">
+                                
+                                        <div class="legend-item">
+                                            <span class="legend confirmed"></span>
+                                            Confirmed
+                                        </div>
+                                
+                                        <div class="legend-item">
+                                            <span class="legend pending"></span>
+                                            Pending
+                                        </div>
+                                
+                                        <div class="legend-item">
+                                            <span class="legend completed"></span>
+                                            Completed
+                                        </div>
+                                
+                                        <div class="legend-item">
+                                            <span class="legend cancelled"></span>
+                                            Cancelled
+                                        </div>
+                                
+                                    </div>
+                                
+                                </div>
+                                
+                                
+                                <!-- Booking Details Modal -->
+                                <div
+                                    class="modal-overlay"
+                                    *ngIf="selectedBooking"
+                                    (click)="closeBooking()">
+                                
+                                    <div
+                                        class="booking-modal"
+                                        (click)="$event.stopPropagation()">
+                                
+                                        <div class="modal-header">
+                                
+                                            <h3>
+                                                Booking Details
+                                            </h3>
+                                
+                                            <button
+                                                class="close-btn"
+                                                (click)="closeBooking()">
+                                
+                                                &times;
+                                
+                                            </button>
+                                
+                                        </div>
+                                
+                                
+                                        <div class="modal-body">
+                                
+                                            <div class="detail-row">
+                                
+                                                <span>
+                                                    Booking
+                                                </span>
+                                
+                                                <strong>
+                                                    {{ selectedBooking.title }}
+                                                </strong>
+                                
+                                            </div>
+                                
+                                
+                                            <div class="detail-row">
+                                
+                                                <span>
+                                                    Customer
+                                                </span>
+                                
+                                                <strong>
+                                                    {{ selectedBooking.customer_name }}
+                                                </strong>
+                                
+                                            </div>
+                                
+                                
+                                            <div class="detail-row">
+                                
+                                                <span>
+                                                    Date
+                                                </span>
+                                
+                                                <strong>
+                                                    {{ selectedBooking.date }}
+                                                </strong>
+                                
+                                            </div>
+                                
+                                
+                                            <div class="detail-row">
+                                
+                                                <span>
+                                                    Time
+                                                </span>
+                                
+                                                <strong>
+                                
+                                                    {{ selectedBooking.start_time }}
+                                
+                                                    <span
+                                                        *ngIf="selectedBooking.end_time">
+                                
+                                                        -
+                                                        {{ selectedBooking.end_time }}
+                                
+                                                    </span>
+                                
+                                                </strong>
+                                
+                                            </div>
+                                
+                                
+                                            <div class="detail-row">
+                                
+                                                <span>
+                                                    Status
+                                                </span>
+                                
+                                                <strong
+                                                    [ngClass]="getStatusClass(selectedBooking.status)">
+                                
+                                                    {{ selectedBooking.status }}
+                                
+                                                </strong>
+                                
+                                            </div>
+                                
+                                        </div>
+                                
+                                    </div>
+                                
+                                </div>
+                            </div>
                         </div>
-
-                        <div
-                            class="booking-time"
-                            *ngIf="booking.start_time">
-
-                            {{ booking.start_time }}
-
-                        </div>
-
+                       
                     </div>
-
                 </div>
-
+                <!-- main Area :: End -->
             </div>
 
+           
+            <!--Footer :: Start-->
         </div>
-
+        <!-- Page Content :: End -->
+        <app-footer></app-footer>
+        <!--Footer :: End-->
     </div>
-
-
-    <!-- Legend -->
-    <div class="calendar-legend">
-
-        <div class="legend-item">
-            <span class="legend confirmed"></span>
-            Confirmed
-        </div>
-
-        <div class="legend-item">
-            <span class="legend pending"></span>
-            Pending
-        </div>
-
-        <div class="legend-item">
-            <span class="legend completed"></span>
-            Completed
-        </div>
-
-        <div class="legend-item">
-            <span class="legend cancelled"></span>
-            Cancelled
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- Booking Details Modal -->
-<div
-    class="modal-overlay"
-    *ngIf="selectedBooking"
-    (click)="closeBooking()">
-
-    <div
-        class="booking-modal"
-        (click)="$event.stopPropagation()">
-
-        <div class="modal-header">
-
-            <h3>
-                Booking Details
-            </h3>
-
-            <button
-                class="close-btn"
-                (click)="closeBooking()">
-
-                &times;
-
-            </button>
-
-        </div>
-
-
-        <div class="modal-body">
-
-            <div class="detail-row">
-
-                <span>
-                    Booking
-                </span>
-
-                <strong>
-                    {{ selectedBooking.title }}
-                </strong>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span>
-                    Customer
-                </span>
-
-                <strong>
-                    {{ selectedBooking.customer_name }}
-                </strong>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span>
-                    Date
-                </span>
-
-                <strong>
-                    {{ selectedBooking.date }}
-                </strong>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span>
-                    Time
-                </span>
-
-                <strong>
-
-                    {{ selectedBooking.start_time }}
-
-                    <span
-                        *ngIf="selectedBooking.end_time">
-
-                        -
-                        {{ selectedBooking.end_time }}
-
-                    </span>
-
-                </strong>
-
-            </div>
-
-
-            <div class="detail-row">
-
-                <span>
-                    Status
-                </span>
-
-                <strong
-                    [ngClass]="getStatusClass(selectedBooking.status)">
-
-                    {{ selectedBooking.status }}
-
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+</main>

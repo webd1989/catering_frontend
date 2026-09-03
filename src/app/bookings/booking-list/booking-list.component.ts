@@ -61,9 +61,10 @@ export class BookingListComponent implements OnInit,OnDestroy {
   }
   addMore(){
     this.eventTypesRows.push({
-      'event_type_id':0,
-      'per_person':0,
-      'no_of_guest':0,
+      'event_type_id':'',
+      'per_person':'',
+      'no_of_guest':'',
+      'event_date':'',
       'id':0
     });
   }
@@ -84,6 +85,9 @@ export class BookingListComponent implements OnInit,OnDestroy {
   }
   setPerPerson(i:number){
       this.eventTypesRows[i].per_person = $('#per_person_rate_'+i).val();
+  }
+  setEventDate(i:number){
+    this.eventTypesRows[i].event_date = $('#event_date_'+i).val();
   }
   setNoOfGuest(i:number){
       this.eventTypesRows[i].no_of_guest = $('#no_of_guest_'+i).val();
@@ -247,7 +251,8 @@ export class BookingListComponent implements OnInit,OnDestroy {
               id:value.id,
               event_type_id: value.event_type_id,  
               per_person: value.rate,
-              no_of_guest: value.no_of_guest
+              no_of_guest: value.no_of_guest,
+              event_date:value.event_date
             });
           });
         }

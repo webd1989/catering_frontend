@@ -81,7 +81,7 @@
 </main>
 
 <!-- CreateTemplate Edit Modal Starts  -->
-<div class="modal fade" id="createTemplate">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false"  id="createTemplate">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <!-- Modal Header -->
@@ -260,25 +260,27 @@
                     <hr>
 
                     <div class="row" *ngFor="let eventTypesRow of eventTypesRows; index as i">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                     <div class="input-group mb-3">
-                        <span class="input-group-text font-12">Event Type</span>
                         <select  class="form-select" [id]="'event_type_id_'+i" (change)="setEventType(i)" >
                             <option value="">Select Event Type</option>
                             <option *ngFor="let eventType of eventTypes" [selected]="eventTypesRow?.event_type_id == eventType?.id" value="{{eventType?.id}}">{{eventType?.title}}</option>
                         </select>
                     </div>
                     </div>
-                    <div class="col-lg-4">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text font-12">@ Person Rate</span>
-                        <input type="text" [id]="'per_person_rate_'+i" value="{{eventTypesRow?.per_person}}" maxlength="4" (blur)="setPerPerson(i)" class="form-control" >
-                    </div>
-                    </div>
+                    <div class="col-lg-3">
+                        <div class="input-group mb-3">
+                            <input type="date" [id]="'event_date_'+i" value="{{eventTypesRow?.event_date}}" (input)="setEventDate(i)" class="form-control" >
+                        </div>
+                        </div>
                     <div class="col-lg-3">
                     <div class="input-group mb-3">
-                        <span class="input-group-text font-12">No of Guest</span>
-                        <input type="text" [id]="'no_of_guest_'+i" value="{{eventTypesRow?.no_of_guest}}" (blur)="setNoOfGuest(i)" class="form-control" >
+                        <input type="text" placeholder="Per/Person Rate" [id]="'per_person_rate_'+i" value="{{eventTypesRow?.per_person}}" maxlength="4" (input)="setPerPerson(i)" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-2">
+                    <div class="input-group mb-3">
+                        <input type="text" placeholder="No Of Guest" [id]="'no_of_guest_'+i" value="{{eventTypesRow?.no_of_guest}}" (input)="setNoOfGuest(i)" class="form-control" >
                     </div>
                     </div>
                     <div class="col-lg-1">
@@ -300,7 +302,7 @@
                 </div>
                 </div>
                     
-                  <!-- {{this.payments | json}}  -->
+                  <!--  {{this.eventTypesRows | json}}  -->
                 </form>
 
             </div>

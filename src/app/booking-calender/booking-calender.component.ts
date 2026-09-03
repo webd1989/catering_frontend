@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+declare var $: any;
+import { ServiceService } from '../services/service.service';
+import { Router } from '@angular/router';
+import {from, noop, of, Subject} from 'rxjs';
+import {map, mergeAll, mergeMap, takeUntil} from 'rxjs/operators';
+import Swal from 'sweetalert2';
+import { ToastrService } from 'ngx-toastr';
 
 interface Booking {
   id: number;
@@ -45,47 +52,30 @@ export class BookingCalenderComponent implements OnInit {
       start_time: '10:00',
       end_time: '14:00',
       status: 'confirmed'
-    },
-    {
-      id: 2,
-      title: 'Birthday Party',
-      customer_name: 'Amit Kumar',
-      date: '2026-09-03',
-      start_time: '18:00',
-      end_time: '21:00',
-      status: 'pending'
-    },
-    {
-      id: 3,
-      title: 'Corporate Event',
-      customer_name: 'ABC Pvt Ltd',
-      date: '2026-09-10',
-      start_time: '11:00',
-      end_time: '16:00',
-      status: 'confirmed'
-    },
-    {
-      id: 4,
-      title: 'Engagement',
-      customer_name: 'Vikas Sharma',
-      date: '2026-09-15',
-      start_time: '17:00',
-      end_time: '22:00',
-      status: 'completed'
-    },
-    {
-      id: 5,
-      title: 'Wedding Reception',
-      customer_name: 'Mohit Jain',
-      date: '2026-09-20',
-      start_time: '19:00',
-      end_time: '23:00',
-      status: 'cancelled'
     }
   ];
 
+  destroy$ = new Subject();
+
+  constructor(
+    private appService: ServiceService,
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
+
   ngOnInit(): void {
     this.generateCalendar();
+  }
+  getBookingsFromDb(){
+    const data = {
+      token: localStorage.getItem('token')
+    };
+    this.appService.postData('booking/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
+
+    },error=>{
+      this.toastr.error("Server Error","Error");
+    });
   }
 
   /**
