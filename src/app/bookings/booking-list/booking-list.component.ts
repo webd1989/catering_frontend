@@ -110,6 +110,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
     $('#addUserBtn').html('Processing...');
     const data = {
       id:$('#r_id').val(),
+      booking_title:$('#booking_title').val(),
       name:$('#name').val(),
       phone:$('#phone').val(),
       email:$('#email').val(),
@@ -124,6 +125,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
       advance_date:$('#advance_date').val(),
       location_url:$('#location_url').val(),
       logistic_range:$('#logistic_range').val(),
+      booking_status:$('#booking_status').val(),
       gst:$('#gst').val(),
       eventTypesRows:this.eventTypesRows,
       payment_info:this.payments
@@ -162,6 +164,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
   }
 
   cleanForm(){
+    $('#booking_title').val('');
     $('#name').val('');
     $('#phone').val('');
     $('#email').val('');
@@ -175,6 +178,8 @@ export class BookingListComponent implements OnInit,OnDestroy {
   getList(){
     const data = {
       token: localStorage.getItem('token'),
+      search_key: $("#search_key").val(),
+      booking_status: $("#f_booking_status").val(),
       page: this.p
     };
     this.getListFromServer(data);
@@ -184,6 +189,17 @@ export class BookingListComponent implements OnInit,OnDestroy {
       var r:any=res;
       this.users = r.users.data;
       this.total = r.users.total;
+    },error=>{
+      this.toastr.error("Server Error","Error");
+    });
+  }
+  generatePdf(id:number){
+    const data = {
+      token: localStorage.getItem('token'),
+      id: id
+    };
+    this.appService.postData('generate/booking/pdf',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
     },error=>{
       this.toastr.error("Server Error","Error");
     });
@@ -214,6 +230,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
       var r:any=res;
       if(r.success){
         $('#r_id').val(r.user.id);
+        $('#booking_title').val(r.user.booking_title);
         $('#name').val(r.user.name);
         $('#email').val(r.user.email);
         $('#phone').val(r.user.phone);
@@ -229,6 +246,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
         $('#location_url').val(r.user.location_url),
         $('#logistic_range').val(r.user.logistic_range),
         $('#gst').val(r.user.gst),
+        $('#booking_status').val(r.user.booking_status),
         this.payments = [];
         this.payments = r.user.payment_info;
 
@@ -305,6 +323,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
     const data = {
       token: localStorage.getItem('token'),
       search_key: $("#search_key").val(),
+      booking_status: $("#f_booking_status").val(),
       page: this.p
     };
     this.getListFromServer(data);
@@ -312,11 +331,8 @@ export class BookingListComponent implements OnInit,OnDestroy {
   reset(){
     const data = {
       token: localStorage.getItem('token'),
-      name: '',
-      email: '',
-      phone: '',
-      zipcode: '',
-      page: this.p
+      search_key: '',
+      booking_status: ''
     };
     this.getListFromServer(data);
   }

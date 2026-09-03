@@ -14,7 +14,6 @@
                         <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab2-tab">
                            
                             <div class="page-card-body p-20">
-                                <a (click)="getBookingsFromDb()">aa</a>
                                 <div class="calendar-container">
 
                                     <!-- Calendar Header -->
@@ -122,9 +121,9 @@
                                 
                                                         <div
                                                             class="booking-time"
-                                                            *ngIf="booking.start_time">
+                                                            *ngIf="booking.location">
                                 
-                                                            {{ booking.start_time }}
+                                                            {{ booking.location }}
                                 
                                                         </div>
                                 
@@ -238,20 +237,12 @@
                                             <div class="detail-row">
                                 
                                                 <span>
-                                                    Time
+                                                    Location
                                                 </span>
                                 
                                                 <strong>
                                 
-                                                    {{ selectedBooking.start_time }}
-                                
-                                                    <span
-                                                        *ngIf="selectedBooking.end_time">
-                                
-                                                        -
-                                                        {{ selectedBooking.end_time }}
-                                
-                                                    </span>
+                                                    {{ selectedBooking.location }}
                                 
                                                 </strong>
                                 

@@ -16,6 +16,15 @@
                         <div class="has-search">
                             <input type="text" name="search_key" id="search_key" (keyup)="searchData()" class="form-control" placeholder="Search User">
                         </div>
+                        <div class="has-search">
+                            <select (change)="searchData()" class="form-select" id="f_booking_status"  >
+                                <option value="">Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
                         <a href="javascript:;" (click)="setHeading()" class="btn btn-primary text-uppercase text-center font-12" type="button" data-bs-toggle="modal" data-bs-target="#createTemplate"><i class="far fa-plus me-1"></i> Add</a>
                     </div>
                 </div>
@@ -26,7 +35,6 @@
                                     <tr>
                                         <th class="text-uppercase whitespace-nowrap text-start">S.NO</th>
                                         <th class="text-uppercase whitespace-nowrap">Name</th>
-                                        <th class="text-uppercase whitespace-nowrap">Email Address</th>
                                         <th class="text-uppercase whitespace-nowrap">Phone</th>
                                         <th class="text-uppercase whitespace-nowrap">Event Date</th>
                                         <th class="text-uppercase whitespace-nowrap">Location</th>
@@ -35,6 +43,7 @@
                                         <th class="text-uppercase whitespace-nowrap">Logistic</th>
                                         <th class="text-uppercase whitespace-nowrap">GST</th>
                                         <th class="text-uppercase whitespace-nowrap">Total</th>
+                                        <th class="text-uppercase whitespace-nowrap">Status</th>
                                         <th class="text-uppercase whitespace-nowrap">Date</th>
                                         <th class="text-uppercase whitespace-nowrap">ACTION</th>
                                     </tr>
@@ -43,7 +52,6 @@
                                     <tr *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p, totalItems: total }; index as i">
                                         <td class="whitespace-nowrap text-start">{{i+1}}</td>
                                         <td class="whitespace-nowrap">{{user.name}}</td>
-                                        <td class="whitespace-nowrap">{{user.email}}</td>
                                         <td class="whitespace-nowrap">{{user.phone}}</td>
                                         <td class="whitespace-nowrap">{{user.display_event_date}}</td>
                                         <td class="whitespace-nowrap">{{user.location}}</td>
@@ -52,6 +60,12 @@
                                         <td class="whitespace-nowrap">{{user.logistic}}</td>
                                         <td class="whitespace-nowrap">{{user.gst_amt}}</td>
                                         <td class="whitespace-nowrap">{{user.total}}</td>
+                                        <td class="whitespace-nowrap">
+                                            <span *ngIf="user.booking_status == 'pending'" class="pending">Pending</span>
+                                            <span *ngIf="user.booking_status == 'confirmed'" class="confirmed">Confirmed</span>
+                                            <span *ngIf="user.booking_status == 'completed'" class="completed">Completed</span>
+                                            <span *ngIf="user.booking_status == 'cancelled'" class="cancelled">Cancelled</span>
+                                        </td>
                                         
                                         <td class="text-capitalize whitespace-nowrap">{{user.display_date}}</td>
                                         <td class="text-capitalize whitespace-nowrap">
@@ -60,10 +74,14 @@
                                             </a>
                                             <a href="javascript:;" (click)="Delete(user.id)" class="text-capitalize font-12 text-red" data-bs-toggle="modal" data-bs-target="#deleteTemplate">
                                                 <i class="far fa-trash-alt"></i>
+                                            </a>&nbsp;
+                                            <a  (click)="generatePdf(user.id)" class="text-capitalize font-12 text-info me-3">
+                                                <i class="fas fa-download"></i>
                                             </a>
+                                            
                                         </td>
                                     </tr>
-                                    <tr><td colspan="10"><div class="pagiation"><pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls></div></td></tr>
+                                    <tr><td colspan="20"><div class="pagiation"><pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls></div></td></tr>
 
                                     
                                 </tbody>
@@ -95,14 +113,20 @@
             <div class="modal-body">
                 <form class="mt-0">
                     <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                     <div class="input-group mb-3">
-                    <span class="input-group-text font-12">Name</span>
-                    <input type="text" class="form-control" id="name">
+                    <span class="input-group-text font-12">Event Title</span>
+                    <input type="text" class="form-control" id="booking_title">
                     <input type="hidden" id="r_id">
                     </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
+                        <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Name</span>
+                        <input type="text" class="form-control" id="name">
+                        </div>
+                        </div>
+                    <div class="col-lg-4">
                     <div class="input-group mb-3">
                     <span class="input-group-text font-12">Phone</span>
                     <input type="text" maxlength="10" id="phone" class="form-control" >
@@ -110,18 +134,29 @@
                     </div>
                     </div>
                     <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Email</span>
                         <input type="text" id="email" class="form-control">
                     </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Event Date</span>
                         <input type="date" id="event_date" class="form-control" >
                     </div>
                     </div>
+                    <div class="col-lg-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text font-12">Booking Status</span>
+                            <select  class="form-select" id="booking_status"  >
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        </div>
                     
                     </div>
 

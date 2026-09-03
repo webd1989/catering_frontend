@@ -15,6 +15,7 @@ interface Booking {
   start_time?: string;
   end_time?: string;
   status: string;
+  location: string;
 }
 
 interface CalendarDay {
@@ -62,41 +63,21 @@ export class BookingCalenderComponent implements OnInit {
     token: localStorage.getItem('token')
   };
 
-  this.appService
-    .postData('booking/list/all', data)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(
+  this.appService.postData('booking/list/all', data).pipe(takeUntil(this.destroy$)).subscribe(
       (res: any) => {
 
-        console.log('Booking API Response:', res);
-
         if (res.success == true) {
-
           this.bookings = res.records || [];
-
         } else {
-
           this.bookings = [];
-
         }
 
         // Important
         this.generateCalendar();
-
       },
       error => {
-
-        console.error(error);
-
         this.bookings = [];
-
         this.generateCalendar();
-
-        this.toastr.error(
-          "Server Error",
-          "Error"
-        );
-
       }
     );
 }
