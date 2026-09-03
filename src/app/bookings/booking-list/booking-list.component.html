@@ -32,6 +32,8 @@
                                         <th class="text-uppercase whitespace-nowrap">Location</th>
                                         <th class="text-uppercase whitespace-nowrap">No Of Guest</th>
                                         <th class="text-uppercase whitespace-nowrap">Ad. Amt</th>
+                                        <th class="text-uppercase whitespace-nowrap">Logistic</th>
+                                        <th class="text-uppercase whitespace-nowrap">GST</th>
                                         <th class="text-uppercase whitespace-nowrap">Total</th>
                                         <th class="text-uppercase whitespace-nowrap">Date</th>
                                         <th class="text-uppercase whitespace-nowrap">ACTION</th>
@@ -47,6 +49,8 @@
                                         <td class="whitespace-nowrap">{{user.location}}</td>
                                         <td class="whitespace-nowrap">{{user.no_of_guest}}</td>
                                         <td class="whitespace-nowrap">{{user.advance_amt}}</td>
+                                        <td class="whitespace-nowrap">{{user.logistic}}</td>
+                                        <td class="whitespace-nowrap">{{user.gst_amt}}</td>
                                         <td class="whitespace-nowrap">{{user.total}}</td>
                                         
                                         <td class="text-capitalize whitespace-nowrap">{{user.display_date}}</td>
@@ -132,7 +136,7 @@
                     
                     </div>
                     <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Location</span>
                         <input type="text" id="location" class="form-control">
@@ -144,21 +148,7 @@
                         <input type="text" id="no_of_guest" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-4">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text font-12">Advance Amt</span>
-                        <input type="text" id="advance_amt" class="form-control" >
-                    </div>
-                    </div>
-                    <div class="col-lg-1">
-                    <div class="input-group mb-3">
-                        <a (click)="addMore()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i></a>
-                    </div>
-                    </div>
-                    
-                    </div>
-                    <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Vehicle No</span>
                         <input type="text" id="vehicle_no" class="form-control">
@@ -170,8 +160,105 @@
                         <input type="text" id="deleivery_time" class="form-control" >
                     </div>
                     </div>
+
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-5">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Location URL</span>
+                        <input type="text" id="location_url" class="form-control">
+                    </div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="input-group mb-3">
+                        <select  class="form-select" id="logistic_range"  >
+                            <option value="">Logistic Range</option>
+                            <option *ngFor="let range of ranges" value="{{range?.id}}">{{range?.title}} KM</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="col-lg-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">GST</span>
+                        <select class="form-select" id="gst">
+                            <option value="5">5%</option>
+                            <option value="9">9%</option>
+                            <option value="18">18%</option>
+                            <option value="28">28%</option>
+                        </select>
+                    </div>
+                    </div>
+
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Advance Amt</span>
+                        <input type="text" id="advance_amt" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Payment Mode</span>
+                        <select class="form-control" id="payment_mode">
+                            <option value="Cash">Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Cheque">Cheque</option>
+                            <option value="Net Banking">Net Banking</option>
+                            <option value="Account Deposit">Account Deposit</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Payment Date</span>
+                        <input type="date" id="advance_date" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-1">
+                    <div class="input-group mb-3">
+                        <a (click)="addPaymentRow()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i></a>
+                    </div>
+                    </div>
                     
                     </div>
+
+                    <div class="row" *ngFor="let payment of payments; index as j">
+                    <div class="col-lg-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Amount</span>
+                        <input type="text" [id]="'amount_'+j" value="{{payment?.amount}}" (blur)="setAmount(j)" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-3">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Payment Mode</span>
+                        <select [id]="'payment_method_'+j" (change)="setPaymentMethod(j)" class="form-control">
+                            <option [selected]="payment?.payment_method == 'Cash'" value="Cash">Cash</option>
+                            <option [selected]="payment?.payment_method == 'UPI'" value="UPI">UPI</option>
+                            <option [selected]="payment?.payment_method == 'Cheque'" value="Cheque">Cheque</option>
+                            <option [selected]="payment?.payment_method == 'Net Banking'" value="Net Banking">Net Banking</option>
+                            <option [selected]="payment?.payment_method == 'Account Deposit'" value="Account Deposit">Account Deposit</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text font-12">Payment Date</span>
+                        <input [id]="'payment_date_'+j" type="date" value="{{payment?.payment_date}}" (blur)="setPaymentDate(j)" id="advance_amt" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-1">
+                    <div class="input-group mb-3">
+                        <a  (click)="removePaymentRow(j)" title="Create Invoice" class="btn btn-danger btn-sm text-uppercase" ><i class="fas fa-trash"></i></a>
+                    </div>
+                    </div>
+                    
+                    </div>
+                    
+
+                    <hr>
+
                     <div class="row" *ngFor="let eventTypesRow of eventTypesRows; index as i">
                     <div class="col-lg-4">
                     <div class="input-group mb-3">
@@ -203,8 +290,17 @@
                     
                      
                     </div>
+                <div class="row" >
+                <div class="col-lg-11"></div>
+                <div class="col-lg-1">
+                <div class="input-group mb-3">
+
+                <a (click)="addMore()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i></a>
+                </div>
+                </div>
+                </div>
                     
-                    <!--  {{this.eventTypesRows | json}} -->
+                  <!-- {{this.payments | json}}  -->
                 </form>
 
             </div>

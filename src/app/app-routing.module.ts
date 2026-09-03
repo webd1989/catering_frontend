@@ -35,6 +35,8 @@ import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.co
 import { EquipmentCategoriesComponent } from './equipment-categories/equipment-categories.component';
 import { EquipmentsComponent } from './equipments/equipments.component';
 import { RolesComponent } from './roles/roles.component';
+import { LogisticRangeComponent } from './logistic-range/logistic-range.component';
+import { DemandComponent } from './demand/demand.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -68,7 +70,9 @@ const routes: Routes = [
   {path:'edit-purchase/:id',component:EditPurchaseComponent},
   {path:'equipment-categories',component:EquipmentCategoriesComponent},
   {path:'equipments',component:EquipmentsComponent},
-  {path:'roles',component:RolesComponent}
+  {path:'roles',component:RolesComponent},
+  {path:'logistic-range',component:LogisticRangeComponent},
+  {path:'demand-list',component:DemandComponent}
 ];
 
 @NgModule({

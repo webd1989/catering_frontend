@@ -32,6 +32,7 @@
                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/equipment-categories">Equipment Categories</a></li> 
                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/equipments">Equipments</a></li>
                                     <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/roles">Roles</a></li> 
+                                    <li *ngIf="userType=='Admin'"><a class="dropdown-item font-13" routerLink="/logistic-range">Logistic Range</a></li> 
                                 </ul>
                             </li>
                             <li *ngIf="userType=='Admin'" class="nav-item dropdown d-menu me-3">
@@ -55,6 +56,9 @@
                             </li>
                             <li *ngIf="userType=='Admin'" class="nav-item d-menu">
                                 <a class="nav-link font-15 font-weight-400 active" routerLink="/purchase-list"><i class="fas fa-bars text-main"></i> Purchase</a>
+                            </li>
+                            <li *ngIf="userType=='Admin'" class="nav-item d-menu">
+                                <a class="nav-link font-15 font-weight-400 active" routerLink="/demand-list"><i class="fas fa-bars text-main"></i> Demand</a>
                             </li>
                             
                            

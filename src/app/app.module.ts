@@ -46,6 +46,8 @@ import { EditPurchaseComponent } from './purchase/edit-purchase/edit-purchase.co
 import { EquipmentCategoriesComponent } from './equipment-categories/equipment-categories.component';
 import { EquipmentsComponent } from './equipments/equipments.component';
 import { RolesComponent } from './roles/roles.component';
+import { LogisticRangeComponent } from './logistic-range/logistic-range.component';
+import { DemandComponent } from './demand/demand.component';
 
 
 
@@ -87,7 +89,9 @@ import { RolesComponent } from './roles/roles.component';
     EditPurchaseComponent,
     EquipmentCategoriesComponent,
     EquipmentsComponent,
-    RolesComponent
+    RolesComponent,
+    LogisticRangeComponent,
+    DemandComponent
   ],
   imports: [
     BrowserModule,

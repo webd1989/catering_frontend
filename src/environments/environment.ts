@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-   serviceUrl: 'http://localhost/catering_backend/api/',
-   documentUrl: 'http://localhost/catering_backend/',
+   serviceUrl: 'https://www.mamusinfusion.com/api/',
+   documentUrl: 'https://www.mamusinfusion.com/',
   
 };
 

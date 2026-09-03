@@ -22,6 +22,8 @@ export class BookingListComponent implements OnInit,OnDestroy {
   action:any = '';
   eventTypes:any = [];
   eventTypesRows:any = [];
+  payments:any = [];
+  ranges:any = [];
 
   destroy$ = new Subject();
 
@@ -37,6 +39,25 @@ export class BookingListComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     this.getList();
     this.getEventTypes();
+    this.getLogisticRange();
+  }
+  getLogisticRange(){
+    var data = {
+      token: localStorage.getItem('token')
+    }
+     this.appService.postData('range/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
+      this.ranges = r.records;
+    },error=>{
+      this.toastr.error("Server Error","Error");
+    });
+  }
+  addPaymentRow(){
+    this.payments.push({
+      'amount':0,
+      'payment_method':'Cash',
+      'payment_date':''
+    });
   }
   addMore(){
     this.eventTypesRows.push({
@@ -45,6 +66,18 @@ export class BookingListComponent implements OnInit,OnDestroy {
       'no_of_guest':0,
       'id':0
     });
+  }
+  removePaymentRow(i:number){
+    this.payments.splice(i, 1);
+  }
+  setAmount(j:number){
+    this.payments[j].amount = $('#amount_'+j).val();
+  }
+  setPaymentDate(j:number){
+    this.payments[j].payment_date = $('#payment_date_'+j).val();
+  }
+  setPaymentMethod(j:number){
+    this.payments[j].payment_method = $('#payment_method_'+j).val();
   }
   setEventType(i:number){
       this.eventTypesRows[i].event_type_id = $('#event_type_id_'+i).val();
@@ -83,7 +116,13 @@ export class BookingListComponent implements OnInit,OnDestroy {
       advance_amt:$('#advance_amt').val(),
       vehicle_no:$('#vehicle_no').val(),
       deleivery_time:$('#deleivery_time').val(),
-      eventTypesRows:this.eventTypesRows
+      payment_mode:$('#payment_mode').val(),
+      advance_date:$('#advance_date').val(),
+      location_url:$('#location_url').val(),
+      logistic_range:$('#logistic_range').val(),
+      gst:$('#gst').val(),
+      eventTypesRows:this.eventTypesRows,
+      payment_info:this.payments
     };
     if(this.action == 'Add'){
       this.appService.postData('booking/create',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
@@ -127,6 +166,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
     $('#location').val('');
     $('#no_of_guest').val('');
     $('#advance_amt').val('');
+    $('#logistic_range').val('');
   }
   getList(){
     const data = {
@@ -180,6 +220,26 @@ export class BookingListComponent implements OnInit,OnDestroy {
         $('#advance_amt').val(r.user.advance_amt);
         $('#vehicle_no').val(r.user.vehicle_no),
         $('#deleivery_time').val(r.user.deleivery_time),
+        $('#payment_mode').val(r.user.payment_mode),
+        $('#advance_date').val(r.user.advance_date),
+        $('#location_url').val(r.user.location_url),
+        $('#logistic_range').val(r.user.logistic_range),
+        $('#gst').val(r.user.gst),
+        this.payments = [];
+        this.payments = r.user.payment_info;
+
+       if (r.user.payment_info) {
+        const paymentInfo = JSON.parse(r.user.payment_info);
+        
+        this.payments = []; // Pehle empty kar
+        paymentInfo.forEach((value: any, index: number) => {
+          this.payments.push({
+            amount: value.amount,  
+            payment_method: value.payment_method,
+            payment_date: value.payment_date
+          });
+        });
+      }
         this.eventTypesRows = [];
         if(r.user.booked_event_types.length > 0){
           $.each(r.user.booked_event_types, (index: any, value: any ) => {
