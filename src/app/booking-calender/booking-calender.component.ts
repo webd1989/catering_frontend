@@ -43,17 +43,7 @@ export class BookingCalenderComponent implements OnInit {
 
   // Test data
   // Later this will come from Laravel API
-  bookings: Booking[] = [
-    {
-      id: 1,
-      title: 'Wedding Booking',
-      customer_name: 'Rahul Sharma',
-      date: '2026-09-03',
-      start_time: '10:00',
-      end_time: '14:00',
-      status: 'confirmed'
-    }
-  ];
+  bookings: Booking[] = [];
 
   destroy$ = new Subject();
 
@@ -64,19 +54,52 @@ export class BookingCalenderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.generateCalendar();
+    this.getBookingsFromDb();
   }
-  getBookingsFromDb(){
-    const data = {
-      token: localStorage.getItem('token')
-    };
-    this.appService.postData('booking/list/all',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
-      var r:any=res;
+  getBookingsFromDb() {
 
-    },error=>{
-      this.toastr.error("Server Error","Error");
-    });
-  }
+  const data = {
+    token: localStorage.getItem('token')
+  };
+
+  this.appService
+    .postData('booking/list/all', data)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(
+      (res: any) => {
+
+        console.log('Booking API Response:', res);
+
+        if (res.success == true) {
+
+          this.bookings = res.records || [];
+
+        } else {
+
+          this.bookings = [];
+
+        }
+
+        // Important
+        this.generateCalendar();
+
+      },
+      error => {
+
+        console.error(error);
+
+        this.bookings = [];
+
+        this.generateCalendar();
+
+        this.toastr.error(
+          "Server Error",
+          "Error"
+        );
+
+      }
+    );
+}
 
   /**
    * Generate calendar
