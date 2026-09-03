@@ -37,6 +37,7 @@ import { EquipmentsComponent } from './equipments/equipments.component';
 import { RolesComponent } from './roles/roles.component';
 import { LogisticRangeComponent } from './logistic-range/logistic-range.component';
 import { DemandComponent } from './demand/demand.component';
+import { BookingCalenderComponent } from './booking-calender/booking-calender.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -72,7 +73,8 @@ const routes: Routes = [
   {path:'equipments',component:EquipmentsComponent},
   {path:'roles',component:RolesComponent},
   {path:'logistic-range',component:LogisticRangeComponent},
-  {path:'demand-list',component:DemandComponent}
+  {path:'demand-list',component:DemandComponent},
+  {path:'booking-calender',component:BookingCalenderComponent}
 ];
 
 @NgModule({

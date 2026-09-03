@@ -48,6 +48,7 @@ import { EquipmentsComponent } from './equipments/equipments.component';
 import { RolesComponent } from './roles/roles.component';
 import { LogisticRangeComponent } from './logistic-range/logistic-range.component';
 import { DemandComponent } from './demand/demand.component';
+import { BookingCalenderComponent } from './booking-calender/booking-calender.component';
 
 
 
@@ -91,7 +92,8 @@ import { DemandComponent } from './demand/demand.component';
     EquipmentsComponent,
     RolesComponent,
     LogisticRangeComponent,
-    DemandComponent
+    DemandComponent,
+    BookingCalenderComponent
   ],
   imports: [
     BrowserModule,
