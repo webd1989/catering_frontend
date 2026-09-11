@@ -6,6 +6,8 @@ import {from, noop, of, Subject} from 'rxjs';
 import {map, mergeAll, mergeMap, takeUntil} from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-booking-list',
@@ -24,13 +26,19 @@ export class BookingListComponent implements OnInit,OnDestroy {
   eventTypesRows:any = [];
   payments:any = [];
   ranges:any = [];
+  pdfUrl = '';
+  safePdfUrl: SafeResourceUrl | null = null;
+  
 
   destroy$ = new Subject();
+
+  public SiteUrl = environment.documentUrl;
 
   constructor(
     private appService: ServiceService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private sanitizer: DomSanitizer,
   ) { }
   ngOnDestroy(): void {
     this.destroy$.complete();
@@ -193,6 +201,21 @@ export class BookingListComponent implements OnInit,OnDestroy {
       this.toastr.error("Server Error","Error");
     });
   }
+ 
+  downloadPdf() { 
+    if (!this.pdfUrl) { 
+      this.toastr.error('PDF available nahi hai', 'Error'); 
+      return; 
+    } 
+    const link = document.createElement('a'); 
+    link.href = this.pdfUrl; 
+    link.download = 'booking-pad.pdf'; 
+    // Kuch mobile browsers ke liye 
+    link.target = '_blank'; 
+    document.body.appendChild(link); 
+    link.click(); 
+    document.body.removeChild(link); 
+  }
   generatePdf(id:number){
     const data = {
       token: localStorage.getItem('token'),
@@ -200,6 +223,13 @@ export class BookingListComponent implements OnInit,OnDestroy {
     };
     this.appService.postData('generate/booking/pdf',data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
       var r:any=res;
+      this.pdfUrl = this.SiteUrl+'storage/pdf/'+r.file_name;
+
+      // Angular trusted PDF URL 
+      this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl( this.pdfUrl + '#toolbar=0' );
+      //$('#previewIfram').attr( 'src', this.pdfUrl + '#toolbar=0' );
+      
+      //window.open(this.SiteUrl+'storage/pdf/'+r.file_name,'_blank');
     },error=>{
       this.toastr.error("Server Error","Error");
     });
