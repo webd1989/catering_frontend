@@ -113,20 +113,20 @@
             <div class="modal-body">
                 <form class="mt-0">
                     <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-12">
                     <div class="input-group mb-3">
                     <span class="input-group-text font-12">Event Title</span>
                     <input type="text" class="form-control" id="booking_title">
                     <input type="hidden" id="r_id">
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-6">
                         <div class="input-group mb-3">
                         <span class="input-group-text font-12">Name</span>
                         <input type="text" class="form-control" id="name">
                         </div>
                         </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-6">
                     <div class="input-group mb-3">
                     <span class="input-group-text font-12">Phone</span>
                     <input type="text" maxlength="10" id="phone" class="form-control" >
@@ -134,21 +134,21 @@
                     </div>
                     </div>
                     <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-12">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Email</span>
                         <input type="text" id="email" class="form-control">
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Event Date</span>
                         <input type="date" id="event_date" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-6">
                         <div class="input-group mb-3">
-                            <span class="input-group-text font-12">Booking Status</span>
+                            <span class="input-group-text font-12">Status</span>
                             <select  class="form-select" id="booking_status"  >
                                 <option value="pending">Pending</option>
                                 <option value="confirmed">Confirmed</option>
@@ -161,7 +161,7 @@
                     </div>
 
                     <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 col-12">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Address</span>
                         <input type="text" id="address" class="form-control">
@@ -171,25 +171,25 @@
                     
                     </div>
                     <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Location</span>
                         <input type="text" id="location" class="form-control">
                     </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">No of Guest</span>
                         <input type="text" id="no_of_guest" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Vehicle No</span>
                         <input type="text" id="vehicle_no" class="form-control">
                     </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Deleivery</span>
                         <input type="text" id="deleivery_time" class="form-control" >
@@ -198,13 +198,13 @@
 
                     </div>
                     <div class="row">
-                    <div class="col-lg-5">
+                    <div class="col-lg-5 col-12">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Location URL</span>
                         <input type="text" id="location_url" class="form-control">
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-6">
                     <div class="input-group mb-3">
                         <select  class="form-select" id="logistic_range"  >
                             <option value="">Logistic Range</option>
@@ -212,7 +212,7 @@
                         </select>
                     </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">GST</span>
                         <select class="form-select" id="gst">
@@ -226,13 +226,13 @@
 
                     </div>
                     <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Advance Amt</span>
                         <input type="text" id="advance_amt" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Payment Mode</span>
                         <select class="form-control" id="payment_mode">
@@ -244,28 +244,28 @@
                         </select>
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Payment Date</span>
                         <input type="date" id="advance_date" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-1">
-                    <div class="input-group mb-3">
-                        <a (click)="addPaymentRow()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i></a>
+                    <div class="col-lg-3 col-6">
+                    <div class="mb-3" style="text-align: right;">
+                        <a (click)="addPaymentRow()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i> Add Payment</a>
                     </div>
                     </div>
                     
                     </div>
 
-                    <div class="row" *ngFor="let payment of payments; index as j">
-                    <div class="col-lg-4">
+                    <div class="row" style="background-color:aquamarine; margin-bottom: 10px;padding-top: 10px;" *ngFor="let payment of payments; index as j">
+                    <div class="col-lg-4 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Amount</span>
                         <input type="text" [id]="'amount_'+j" value="{{payment?.amount}}" (blur)="setAmount(j)" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-3 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Payment Mode</span>
                         <select [id]="'payment_method_'+j" (change)="setPaymentMethod(j)" class="form-control">
@@ -277,14 +277,14 @@
                         </select>
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 col-6">
                     <div class="input-group mb-3">
                         <span class="input-group-text font-12">Payment Date</span>
                         <input [id]="'payment_date_'+j" type="date" value="{{payment?.payment_date}}" (blur)="setPaymentDate(j)" id="advance_amt" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-1">
-                    <div class="input-group mb-3">
+                    <div class="col-lg-1 col-6">
+                    <div class="mb-3">
                         <a  (click)="removePaymentRow(j)" title="Create Invoice" class="btn btn-danger btn-sm text-uppercase" ><i class="fas fa-trash"></i></a>
                     </div>
                     </div>
@@ -294,32 +294,54 @@
 
                     <hr>
 
-                    <div class="row" *ngFor="let eventTypesRow of eventTypesRows; index as i">
-                    <div class="col-lg-3">
-                    <div class="input-group mb-3">
+                    <div class="row" style="background-color: bisque; margin-bottom: 10px;" *ngFor="let eventTypesRow of eventTypesRows; index as i">
+                    <div class="col-lg-2 col-6">
+                    <div class="form-group mb-3">
+                        <label class="text-uppercase font-weight-400 font-12 mb-10">Event Type</label>
                         <select  class="form-select" [id]="'event_type_id_'+i" (change)="setEventType(i)" >
-                            <option value="">Select Event Type</option>
+                            <option value="">Select</option>
                             <option *ngFor="let eventType of eventTypes" [selected]="eventTypesRow?.event_type_id == eventType?.id" value="{{eventType?.id}}">{{eventType?.title}}</option>
                         </select>
                     </div>
                     </div>
-                    <div class="col-lg-3">
-                        <div class="input-group mb-3">
+                    <div class="col-lg-2 col-6">
+                        <div class="form-group mb-3">
+                            <label class="text-uppercase font-weight-400 font-12 mb-10">Event Date</label>
                             <input type="date" [id]="'event_date_'+i" value="{{eventTypesRow?.event_date}}" (input)="setEventDate(i)" class="form-control" >
                         </div>
                         </div>
-                    <div class="col-lg-3">
-                    <div class="input-group mb-3">
-                        <input type="text" placeholder="Per/Person Rate" [id]="'per_person_rate_'+i" value="{{eventTypesRow?.per_person}}" maxlength="4" (input)="setPerPerson(i)" class="form-control" >
+                    <div class="col-lg-2 col-6">
+                        <div class="form-group mb-3">
+                            <label class="text-uppercase font-weight-400 font-12 mb-10">Event Time</label>
+                            <input type="text" [id]="'event_time_'+i" value="{{eventTypesRow?.event_time}}" (input)="setEventTime(i)" class="form-control" >
+                        </div>
+                        </div>
+                    <div class="col-lg-2 col-6">
+                    <div class="form-group mb-3">
+                            <label class="text-uppercase font-weight-400 font-12 mb-10">Venue</label>
+                        <input type="text" [id]="'venue_'+i" value="{{eventTypesRow?.venue}}" (input)="setVenue(i)" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-2">
-                    <div class="input-group mb-3">
-                        <input type="text" placeholder="No Of Guest" [id]="'no_of_guest_'+i" value="{{eventTypesRow?.no_of_guest}}" (input)="setNoOfGuest(i)" class="form-control" >
+                    <div class="col-lg-2 col-6">
+                    <div class="form-group mb-3">
+                            <label class="text-uppercase font-weight-400 font-12 mb-10">Sub Venue</label>
+                        <input type="text"  [id]="'sub_venue_'+i" value="{{eventTypesRow?.sub_venue}}" (input)="setSubVenue(i)" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-1">
-                    <div class="input-group mb-3">
+                    <div class="col-lg-2 col-6">
+                    <div class="form-group mb-3">
+                            <label class="text-uppercase font-weight-400 font-12 mb-10">Per/Person Rate</label>
+                        <input type="text" [id]="'per_person_rate_'+i" value="{{eventTypesRow?.per_person}}" maxlength="4" (input)="setPerPerson(i)" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-2 col-6">
+                    <div class="form-group mb-3">
+                        <label class="text-uppercase font-weight-400 font-12 mb-10">No Of Guest</label>
+                        <input type="text" [id]="'no_of_guest_'+i" value="{{eventTypesRow?.no_of_guest}}" (input)="setNoOfGuest(i)" class="form-control" >
+                    </div>
+                    </div>
+                    <div class="col-lg-1 col-6">
+                    <div class="mb-3" style="padding-top: 32px;">
                        
                         <a  (click)="removeRow(i)" title="Create Invoice" class="btn btn-danger btn-sm text-uppercase" ><i class="fas fa-trash"></i></a>
                     </div>
@@ -328,16 +350,16 @@
                      
                     </div>
                 <div class="row" >
-                <div class="col-lg-11"></div>
-                <div class="col-lg-1">
-                <div class="input-group mb-3">
+                <div class="col-lg-10"></div>
+                <div class="col-lg-2">
+                <div class="" style="text-align: right;">
 
-                <a (click)="addMore()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i></a>
+                <a (click)="addMore()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i> Add Event</a>
                 </div>
                 </div>
                 </div>
                     
-                  <!--  {{this.eventTypesRows | json}}  -->
+                  <!-- {{this.eventTypesRows | json}} -->
                 </form>
 
             </div>
