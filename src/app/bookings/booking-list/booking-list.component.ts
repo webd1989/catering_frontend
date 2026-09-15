@@ -24,6 +24,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
   action:any = '';
   eventTypes:any = [];
   eventTypesRows:any = [];
+  eventRows:any = [];
   payments:any = [];
   ranges:any = [];
   pdfUrl = '';
@@ -67,18 +68,54 @@ export class BookingListComponent implements OnInit,OnDestroy {
       'payment_date':''
     });
   }
-  addMore(){
-    this.eventTypesRows.push({
-      'event_type_id':'',
-      'per_person':'',
-      'no_of_guest':'',
+  addMore2(){
+    this.eventRows.push({
       'event_date':'',
-      'venue':'',
-      'sub_venue':'',
-      'event_time':'',
-      'id':0
+      'event_attributes':[]
     });
   }
+  addMoreEventItems(counter:number){
+    if (!this.eventRows[counter].event_attributes) {
+      this.eventRows[counter].event_attributes = [];
+    }
+    this.eventRows[counter].event_attributes.push({
+      event_type_id: '',
+      per_person: '',
+      no_of_guest: '',
+      venue: '',
+      sub_venue: '',
+      event_time: '',
+      id: 0
+    });
+  }
+  setEventDate(i:number){
+    this.eventRows[i].event_date = $('#event_date_'+i).val();
+  }
+  removeRow(i:number){
+    this.eventRows.splice(i, 1);
+  }
+  setEventType(i:number,j:number){
+    this.eventRows[i].event_attributes[j].event_type_id = $('#event_type_id_'+i+'_'+j).val();
+  }
+  setPerPerson(i:number,j:number){
+    this.eventRows[i].event_attributes[j].per_person = $('#per_person_rate_'+i+'_'+j).val();
+  }
+  setEventTime(i:number,j:number){
+    this.eventRows[i].event_attributes[j].event_time = $('#event_time_'+i+'_'+j).val();
+  }
+  setVenue(i:number,j:number){
+    this.eventRows[i].event_attributes[j].venue = $('#venue_'+i+'_'+j).val();
+  }
+  setSubVenue(i:number,j:number){
+    this.eventRows[i].event_attributes[j].sub_venue = $('#sub_venue_'+i+'_'+j).val();
+  }
+  setNoOfGuest(i:number,j:number){
+      this.eventRows[i].event_attributes[j].no_of_guest = $('#no_of_guest_'+i+'_'+j).val();
+  }
+  removeInnerRow(i:number,j:number){
+    this.eventRows[i].event_attributes.splice(j, 1);
+  }
+ 
   removePaymentRow(i:number){
     this.payments.splice(i, 1);
   }
@@ -91,30 +128,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
   setPaymentMethod(j:number){
     this.payments[j].payment_method = $('#payment_method_'+j).val();
   }
-  setEventType(i:number){
-      this.eventTypesRows[i].event_type_id = $('#event_type_id_'+i).val();
-  }
-  setPerPerson(i:number){
-      this.eventTypesRows[i].per_person = $('#per_person_rate_'+i).val();
-  }
-  setEventDate(i:number){
-    this.eventTypesRows[i].event_date = $('#event_date_'+i).val();
-  }
-  setEventTime(i:number){
-    this.eventTypesRows[i].event_time = $('#event_time_'+i).val();
-  }
-  setVenue(i:number){
-    this.eventTypesRows[i].venue = $('#venue_'+i).val();
-  }
-  setSubVenue(i:number){
-    this.eventTypesRows[i].sub_venue = $('#sub_venue_'+i).val();
-  }
-  setNoOfGuest(i:number){
-      this.eventTypesRows[i].no_of_guest = $('#no_of_guest_'+i).val();
-  }
-  removeRow(i:number){
-    this.eventTypesRows.splice(i, 1);
-  }
+
   getEventTypes(){
     var data = {
       token: localStorage.getItem('token')
@@ -147,7 +161,7 @@ export class BookingListComponent implements OnInit,OnDestroy {
       logistic_range:$('#logistic_range').val(),
       booking_status:$('#booking_status').val(),
       gst:$('#gst').val(),
-      eventTypesRows:this.eventTypesRows,
+      eventTypesRows:this.eventRows,
       payment_info:this.payments
     };
     if(this.action == 'Add'){
@@ -304,21 +318,59 @@ export class BookingListComponent implements OnInit,OnDestroy {
           });
         });
       }
-        this.eventTypesRows = [];
-        if(r.user.booked_event_types.length > 0){
-          $.each(r.user.booked_event_types, (index: any, value: any ) => {
-            this.eventTypesRows.push({
-              id:value.id,
-              event_type_id: value.event_type_id,  
-              per_person: value.rate,
-              no_of_guest: value.no_of_guest,
-              event_date:value.event_date,
-              venue:value.venue,
-              sub_venue:value.sub_venue,
-              event_time:value.event_time
+        this.eventRows = [];
+        
+
+        $.each(r.user.booked_event_types, (index: any, value: any) => {
+
+          let eventAttributes: any[] = [];
+        
+          $.each(value, (i: any, event: any) => {
+        
+            eventAttributes.push({
+              id: event.id,
+              event_type_id: event.event_type_id,
+              per_person: event.rate,
+              no_of_guest: event.no_of_guest,
+              venue: event.venue,
+              sub_venue: event.sub_venue,
+              event_time: event.event_time
             });
+        
           });
-        }
+        
+          this.eventRows.push({
+            event_date: index,
+            event_attributes: eventAttributes
+          });
+        
+        });
+          /* if (!this.eventRows[counter].event_attributes) {
+            this.eventRows[counter].event_attributes = [];
+          }
+          this.eventRows[counter].event_attributes.push({
+            event_type_id: '',
+            per_person: '',
+            no_of_guest: '',
+            venue: '',
+            sub_venue: '',
+            event_time: '',
+            id: 0
+          }); */
+        /* this.eventRows.push({
+          'event_date':'',
+          'event_attributes':[]
+        }); */
+        /* this.eventTypesRows.push({
+          id:value.id,
+          event_type_id: value.event_type_id,  
+          per_person: value.rate,
+          no_of_guest: value.no_of_guest,
+          event_date:value.event_date,
+          venue:value.venue,
+          sub_venue:value.sub_venue,
+          event_time:value.event_time
+        }); */
       }else{
         
       }

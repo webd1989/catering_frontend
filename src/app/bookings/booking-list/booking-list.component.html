@@ -292,74 +292,98 @@
                     </div>
                     
 
+                  
                     <hr>
 
-                    <div class="row" style="background-color: bisque; margin-bottom: 10px;" *ngFor="let eventTypesRow of eventTypesRows; index as i">
-                    <div class="col-lg-2 col-6">
+                    <div class="row" style="background-color: bisque; margin-bottom: 10px;" *ngFor="let eventRow of eventRows; index as i">
+                    
+                    <div class="col-lg-2 col-5">
                     <div class="form-group mb-3">
-                        <label class="text-uppercase font-weight-400 font-12 mb-10">Event Type</label>
-                        <select  class="form-select" [id]="'event_type_id_'+i" (change)="setEventType(i)" >
-                            <option value="">Select</option>
-                            <option *ngFor="let eventType of eventTypes" [selected]="eventTypesRow?.event_type_id == eventType?.id" value="{{eventType?.id}}">{{eventType?.title}}</option>
-                        </select>
+                    <label class="text-uppercase font-weight-400 font-12 mb-10">Event Date</label>
+                    <input type="date" [id]="'event_date_'+i" value="{{eventRow?.event_date}}" (input)="setEventDate(i)" class="form-control" >
                     </div>
                     </div>
-                    <div class="col-lg-2 col-6">
-                        <div class="form-group mb-3">
-                            <label class="text-uppercase font-weight-400 font-12 mb-10">Event Date</label>
-                            <input type="date" [id]="'event_date_'+i" value="{{eventTypesRow?.event_date}}" (input)="setEventDate(i)" class="form-control" >
-                        </div>
-                        </div>
-                    <div class="col-lg-2 col-6">
-                        <div class="form-group mb-3">
-                            <label class="text-uppercase font-weight-400 font-12 mb-10">Event Time</label>
-                            <input type="text" [id]="'event_time_'+i" value="{{eventTypesRow?.event_time}}" (input)="setEventTime(i)" class="form-control" >
-                        </div>
-                        </div>
-                    <div class="col-lg-2 col-6">
-                    <div class="form-group mb-3">
-                            <label class="text-uppercase font-weight-400 font-12 mb-10">Venue</label>
-                        <input type="text" [id]="'venue_'+i" value="{{eventTypesRow?.venue}}" (input)="setVenue(i)" class="form-control" >
+
+                    <div class="col-lg-2 col-5">
+                    <div class="mb-3" style="padding-top: 32px;">
+
+                    <a (click)="addMoreEventItems(i)" title="Create Invoice" class="btn btn-success btn-sm text-uppercase" ><i class="fas fa-plus"></i> Add Event</a>
                     </div>
                     </div>
-                    <div class="col-lg-2 col-6">
-                    <div class="form-group mb-3">
-                            <label class="text-uppercase font-weight-400 font-12 mb-10">Sub Venue</label>
-                        <input type="text"  [id]="'sub_venue_'+i" value="{{eventTypesRow?.sub_venue}}" (input)="setSubVenue(i)" class="form-control" >
-                    </div>
-                    </div>
-                    <div class="col-lg-2 col-6">
-                    <div class="form-group mb-3">
-                            <label class="text-uppercase font-weight-400 font-12 mb-10">Per/Person Rate</label>
-                        <input type="text" [id]="'per_person_rate_'+i" value="{{eventTypesRow?.per_person}}" maxlength="4" (input)="setPerPerson(i)" class="form-control" >
-                    </div>
-                    </div>
-                    <div class="col-lg-2 col-6">
-                    <div class="form-group mb-3">
-                        <label class="text-uppercase font-weight-400 font-12 mb-10">No Of Guest</label>
-                        <input type="text" [id]="'no_of_guest_'+i" value="{{eventTypesRow?.no_of_guest}}" (input)="setNoOfGuest(i)" class="form-control" >
-                    </div>
-                    </div>
-                    <div class="col-lg-1 col-6">
+                    
+                    <div class="col-lg-1 col-2">
                     <div class="mb-3" style="padding-top: 32px;">
                        
                         <a  (click)="removeRow(i)" title="Create Invoice" class="btn btn-danger btn-sm text-uppercase" ><i class="fas fa-trash"></i></a>
                     </div>
                     </div>
-                    
-                     
+
+                    <div class="col-lg-12 col-12">
+                        <div *ngFor="let eventAttribute of eventRow?.event_attributes; index as j" class="row" style="background-color:lightgoldenrodyellow;margin-bottom:2px;" >
+                            <div class="col-lg-2 col-6">
+                                <div class="form-group mb-3">
+                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Event Type</label>
+                                    <select  class="form-select" [id]="'event_type_id_'+i+'_'+j" (change)="setEventType(i,j)" >
+                                        <option value="">Select</option>
+                                        <option *ngFor="let eventType of eventTypes" [selected]="eventAttribute?.event_type_id == eventType?.id" value="{{eventType?.id}}">{{eventType?.title}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-1 col-6">
+                                <div class="form-group mb-3">
+                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Time</label>
+                                    <input type="text" value="{{eventAttribute?.event_time}}" [id]="'event_time_'+i+'_'+j" (input)="setEventTime(i,j)" class="form-control" >
+                                </div>
+                                </div>
+                            <div class="col-lg-2 col-6">
+                            <div class="form-group mb-3">
+                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Venue</label>
+                                <input type="text" value="{{eventAttribute?.venue}}" [id]="'venue_'+i+'_'+j" (input)="setVenue(i,j)" class="form-control" >
+                            </div>
+                            </div>
+                            <div class="col-lg-2 col-6">
+                            <div class="form-group mb-3">
+                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Sub Venue</label>
+                                <input type="text" value="{{eventAttribute?.sub_venue}}"  [id]="'sub_venue_'+i+'_'+j" (input)="setSubVenue(i,j)" class="form-control" >
+                            </div>
+                            </div>
+                            <div class="col-lg-2 col-5">
+                            <div class="form-group mb-3">
+                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Per/Person Rate</label>
+                                <input type="text" [id]="'per_person_rate_'+i+'_'+j" maxlength="4" (input)="setPerPerson(i,j)" value="{{eventAttribute?.per_person}}" class="form-control" >
+                            </div>
+                            </div>
+                            <div class="col-lg-2 col-5">
+                            <div class="form-group mb-3">
+                                <label class="text-uppercase font-weight-400 font-12 mb-10">No Of Guest</label>
+                                <input type="text" [id]="'no_of_guest_'+i+'_'+j" (input)="setNoOfGuest(i,j)" value="{{eventAttribute?.no_of_guest}}" class="form-control" >
+                            </div>
+                            </div>
+                            <div class="col-lg-1 col-2">
+                            <div class="mb-3" style="padding-top: 32px;">
+                               
+                                <a  (click)="removeInnerRow(i,j)" title="Create Invoice" class="btn btn-danger btn-sm text-uppercase" ><i class="fas fa-trash"></i></a>
+                            </div>
+                            </div>
+
+                        </div>
                     </div>
+                    
+                
+                     
+                </div>
                 <div class="row" >
-                <div class="col-lg-10"></div>
-                <div class="col-lg-2">
+                <div class="col-lg-9"></div>
+                <div class="col-lg-3">
                 <div class="" style="text-align: right;">
 
-                <a (click)="addMore()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i> Add Event</a>
+                <a (click)="addMore2()" title="Create Invoice" class="btn btn-warning btn-sm text-uppercase" ><i class="fas fa-plus"></i> Add Event Date</a>
                 </div>
                 </div>
                 </div>
                     
-                  <!-- {{this.eventTypesRows | json}} -->
+                  <!-- {{this.eventRows | json}}  -->
                 </form>
 
             </div>
