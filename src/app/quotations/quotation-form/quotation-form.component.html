@@ -1,0 +1,204 @@
+<main>
+    <div class="main-wrapper">
+        <!-- Page Content :: Start  -->
+        <div id="content">
+            <app-header></app-header>
+
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <div class="main-area position-relative">
+
+                    <div class="page-card-title align-items-center justify-content-between">
+                        <div class="row">
+                            <div class="col-lg-6 col-6">
+                                <h4 class="font-16 mb-0">{{heading}}</h4>
+                            </div>
+                            <div class="col-lg-6 col-6 text-end">
+                                <a routerLink="/quotation-list" class="btn btn-primary btn-sm text-uppercase" title="Back to list"><i class="fas fa-arrow-left"></i> List</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-card-body p-20">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <!-- ===== Customer & event ===== -->
+                                <div class="card border-radius-10 mb-4 main-bg-color">
+                                    <div class="card-body p-20">
+                                        <h5 class="qf-section-title">Customer &amp; Event</h5>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Pick Existing Customer</label>
+                                                    <select class="form-select" [(ngModel)]="form.customer_id" (change)="onCustomerChange()">
+                                                        <option value="">— New / walk-in —</option>
+                                                        <option *ngFor="let c of customers" value="{{c?.id}}">{{c?.name}} <span *ngIf="c?.company">({{c?.company}})</span> – {{c?.phone}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Customer Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" [(ngModel)]="form.customer_name" placeholder="Mr. Rajesh Sharma">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Phone <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" [(ngModel)]="form.customer_phone" maxlength="12" placeholder="10 digit mobile">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Email</label>
+                                                    <input type="email" class="form-control" [(ngModel)]="form.customer_email">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Event Title</label>
+                                                    <input type="text" class="form-control" [(ngModel)]="form.event_title" placeholder="Sharma Wedding">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Venue</label>
+                                                    <input type="text" class="form-control" [(ngModel)]="form.venue" placeholder="Hotel / Lawn name">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">City</label>
+                                                    <input type="text" class="form-control" [(ngModel)]="form.city">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Quotation Date <span class="text-danger">*</span></label>
+                                                    <input type="date" class="form-control" [(ngModel)]="form.quotation_date">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-6">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">GST</label>
+                                                    <div class="d-flex">
+                                                        <select class="form-select" [(ngModel)]="form.gst_type" (change)="recalc()">
+                                                            <option value="extra">Extra, as applicable</option>
+                                                            <option value="percent">Add %</option>
+                                                        </select>
+                                                        <input *ngIf="form.gst_type==='percent'" type="number" min="0" max="28" class="form-control qf-gst-pct" [(ngModel)]="form.gst_percent" (input)="recalc()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ===== Line items ===== -->
+                                <div class="card border-radius-10 mb-4 main-bg-color">
+                                    <div class="card-body p-20">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 qf-rows-head">
+                                            <h5 class="qf-section-title mb-0">Functions / Particulars</h5>
+                                            <div class="qf-rows-btns">
+                                                <button type="button" (click)="addRow()" class="btn btn-primary btn-sm text-uppercase" title="Add row (same date)"><i class="fas fa-plus"></i> Row</button>
+                                                <button type="button" (click)="addNextDay()" class="btn btn-warning btn-sm text-uppercase" title="Add row for next day"><i class="fas fa-calendar-plus"></i> Next Day</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered qf-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-uppercase font-12" style="width:4%">#</th>
+                                                        <th class="text-uppercase font-12" style="width:15%">Date <span class="text-danger">*</span></th>
+                                                        <th class="text-uppercase font-12" style="width:27%">Particular (Event Type) <span class="text-danger">*</span></th>
+                                                        <th class="text-uppercase font-12" style="width:10%">Pax</th>
+                                                        <th class="text-uppercase font-12" style="width:12%">Rate / Pax</th>
+                                                        <th class="text-uppercase font-12 text-center" style="width:8%">Lump Sum</th>
+                                                        <th class="text-uppercase font-12 text-end" style="width:14%">Amount</th>
+                                                        <th class="text-uppercase font-12 text-center" style="width:10%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let r of rows; index as i; trackBy: trackByIndex" [class.qf-row-lump]="r.is_lumpsum">
+                                                        <td class="qf-num">{{i+1}}</td>
+                                                        <td>
+                                                            <input type="date" class="form-control form-control-sm" [(ngModel)]="r.event_date">
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-select form-select-sm" [(ngModel)]="r.event_type_id" (change)="onEventTypeChange(i)">
+                                                                <option value="">— Select event type (or type below) —</option>
+                                                                <option *ngFor="let et of eventTypes" value="{{et?.id}}">{{et?.title}}</option>
+                                                            </select>
+                                                            <input *ngIf="!r.event_type_id" type="text" class="form-control form-control-sm mt-1" [(ngModel)]="r.particular" placeholder="Or type particular (e.g. Gokul Sweet)">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" min="0" class="form-control form-control-sm text-center" [(ngModel)]="r.pax" (input)="recalc()" placeholder="250">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" min="0" class="form-control form-control-sm text-end" [(ngModel)]="r.rate" (input)="recalc()" [disabled]="r.is_lumpsum" [placeholder]="r.is_lumpsum ? '—' : '2500'">
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            <input type="checkbox" class="form-check-input qf-check" [(ngModel)]="r.is_lumpsum" (change)="toggleLumpsum(i)" title="Enter amount directly">
+                                                        </td>
+                                                        <td>
+                                                            <input *ngIf="r.is_lumpsum" type="number" min="0" class="form-control form-control-sm text-end fw-bold" [(ngModel)]="r.amount" (input)="recalc()" placeholder="800000">
+                                                            <div *ngIf="!r.is_lumpsum" class="qf-amount">{{inr(r.amount)}}</div>
+                                                        </td>
+                                                        <td class="text-center align-middle whitespace-nowrap">
+                                                            <a href="javascript:;" (click)="duplicateRow(i)" class="text-info me-2" title="Duplicate row"><i class="far fa-copy"></i></a>
+                                                            <a href="javascript:;" (click)="removeRow(i)" class="text-red" title="Remove row"><i class="far fa-trash-alt"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <!-- bottom add buttons (so you don't scroll up after each row) -->
+                                        <div class="qf-rows-btns qf-rows-btns-bottom">
+                                            <button type="button" (click)="addRow()" class="btn btn-primary btn-sm text-uppercase" title="Add row (same date)"><i class="fas fa-plus"></i> Add Row</button>
+                                            <button type="button" (click)="addNextDay()" class="btn btn-warning btn-sm text-uppercase" title="Add row for next day"><i class="fas fa-calendar-plus"></i> Next Day</button>
+                                        </div>
+
+                                        <!-- ===== Totals ===== -->
+                                        <div class="row mt-3">
+                                            <div class="col-lg-7">
+                                                <div class="form-group">
+                                                    <label class="text-uppercase font-weight-400 font-12 mb-10">Notes (printed on PDF, one per line)</label>
+                                                    <textarea rows="4" class="form-control" [(ngModel)]="form.notes"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-5">
+                                                <table class="table qf-totals">
+                                                    <tr><td>Total Pax</td><td class="text-end">{{totalPax | number}}</td></tr>
+                                                    <tr><td>Sub Total</td><td class="text-end fw-bold">{{inr(subtotal)}}</td></tr>
+                                                    <tr *ngIf="form.gst_type==='extra'"><td>GST</td><td class="text-end text-warning fw-bold">Extra, as applicable</td></tr>
+                                                    <tr *ngIf="form.gst_type==='percent'"><td>GST @ {{form.gst_percent}}%</td><td class="text-end">{{inr(gstAmount)}}</td></tr>
+                                                    <tr class="qf-grand"><td>TOTAL <small>{{form.gst_type==='percent' ? '(incl. GST)' : '(excl. GST)'}}</small></td><td class="text-end">{{inr(grandTotal)}}</td></tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3 qf-actions">
+                                            <button type="button" (click)="save(false)" class="btn btn-primary btn-sm text-uppercase" [disabled]="saving">
+                                                <i class="fas" [class.fa-save]="!saving" [class.fa-spinner]="saving" [class.fa-spin]="saving"></i> {{saving ? 'Saving…' : (rowID > 0 ? 'Update' : 'Save')}}
+                                            </button>
+                                            <button type="button" (click)="save(true)" class="btn btn-success btn-sm text-uppercase ms-2" [disabled]="saving">
+                                                <i class="fas fa-file-pdf"></i> Save &amp; Generate PDF
+                                            </button>
+                                            <button type="button" (click)="cancel()" class="btn btn-secondary btn-sm text-uppercase ms-2" [disabled]="saving">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</main>

@@ -38,6 +38,8 @@ import { RolesComponent } from './roles/roles.component';
 import { LogisticRangeComponent } from './logistic-range/logistic-range.component';
 import { DemandComponent } from './demand/demand.component';
 import { BookingCalenderComponent } from './booking-calender/booking-calender.component';
+import { QuotationListComponent } from './quotations/quotation-list/quotation-list.component';
+import { QuotationFormComponent } from './quotations/quotation-form/quotation-form.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -74,7 +76,10 @@ const routes: Routes = [
   {path:'roles',component:RolesComponent},
   {path:'logistic-range',component:LogisticRangeComponent},
   {path:'demand-list',component:DemandComponent},
-  {path:'booking-calender',component:BookingCalenderComponent}
+  {path:'booking-calender',component:BookingCalenderComponent},
+  {path:'quotation-list',component:QuotationListComponent},
+  {path:'create-quotation',component:QuotationFormComponent},
+  {path:'edit-quotation/:id',component:QuotationFormComponent}
 ];
 
 @NgModule({

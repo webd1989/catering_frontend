@@ -1,0 +1,40 @@
+.qf-section-title {
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #4f7f2a;
+  font-weight: 600;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e4ead9;
+}
+.qf-gst-pct { width: 80px; margin-left: 6px; }
+.qf-table td { vertical-align: middle; padding: 6px 6px; }
+.qf-table tr { transition: background .15s ease; }
+.qf-table tbody tr:hover { background: #f3f7ee; }
+.qf-row-lump { background: #fbf6ea; }
+.qf-num { text-align: center; color: #888; font-size: 12px; }
+.qf-amount { text-align: right; font-weight: 600; padding: 6px 8px; color: #1a1a1a; }
+.qf-check { width: 18px; height: 18px; cursor: pointer; }
+.qf-totals td { padding: 7px 10px; border-top: 1px solid #e4ead9; font-size: 13px; }
+.qf-totals tr.qf-grand td { background: #4f7f2a; color: #fff; font-weight: 700; font-size: 16px; border-radius: 4px; }
+.qf-totals tr.qf-grand td small { font-size: 10px; font-weight: 400; letter-spacing: 1px; opacity: .85; background: transparent; color: inherit; padding: 0; }
+.btn.disabled { pointer-events: none; opacity: .6; }
+
+.qf-rows-btns { display: flex; gap: 8px; }
+.qf-rows-btns-bottom { justify-content: flex-end; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e4ead9; }
+.qf-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.qf-actions .btn { margin: 0 !important; }
+
+@media (max-width: 767px) {
+  .qf-rows-head { flex-direction: column; align-items: stretch !important; gap: 10px; margin-bottom: 22px !important; }
+  .qf-rows-head .qf-section-title { margin-bottom: 0; }
+  .qf-rows-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .qf-rows-btns .btn { margin: 0 !important; width: 100%; padding: 10px 8px; }
+  .qf-rows-btns-bottom { margin-top: 0; padding-top: 0; border-top: 0; }
+  .qf-rows-head .qf-rows-btns { display: none; }  /* on phones only the bottom pair is shown */
+  .qf-actions { flex-direction: column; }
+  .qf-actions .btn { width: 100%; padding: 12px; font-size: 14px; }
+  .qf-totals { margin-top: 8px; }
+  .qf-gst-pct { width: 90px; }
+}

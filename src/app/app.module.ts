@@ -49,6 +49,8 @@ import { RolesComponent } from './roles/roles.component';
 import { LogisticRangeComponent } from './logistic-range/logistic-range.component';
 import { DemandComponent } from './demand/demand.component';
 import { BookingCalenderComponent } from './booking-calender/booking-calender.component';
+import { QuotationListComponent } from './quotations/quotation-list/quotation-list.component';
+import { QuotationFormComponent } from './quotations/quotation-form/quotation-form.component';
 
 
 
@@ -93,7 +95,9 @@ import { BookingCalenderComponent } from './booking-calender/booking-calender.co
     RolesComponent,
     LogisticRangeComponent,
     DemandComponent,
-    BookingCalenderComponent
+    BookingCalenderComponent,
+    QuotationListComponent,
+    QuotationFormComponent
   ],
   imports: [
     BrowserModule,

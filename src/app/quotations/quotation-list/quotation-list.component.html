@@ -1,0 +1,124 @@
+<main>
+    <div class="main-wrapper">
+        <!-- Page Content :: Start  -->
+        <div id="content">
+            <app-header></app-header>
+
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <!-- main Area :: Start -->
+                <div class="main-area position-relative">
+                    <div class="page-card-title align-items-center justify-content-between">
+                        <div class="row">
+                            <div class="col-lg-3 col-6 mb-2">
+                                <input type="text" class="form-control" placeholder="Search name / phone / quote no" [(ngModel)]="search" (keyup.enter)="searchData()">
+                            </div>
+                            <div class="col-lg-2 col-6 mb-2">
+                                <select class="form-select" [(ngModel)]="quotation_status">
+                                    <option value="">All Status</option>
+                                    <option *ngFor="let s of statuses" [value]="s">{{s | titlecase}}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-6 mb-2">
+                                <input type="date" class="form-control" [(ngModel)]="from_date" title="From date">
+                            </div>
+                            <div class="col-lg-2 col-6 mb-2">
+                                <input type="date" class="form-control" [(ngModel)]="to_date" title="To date">
+                            </div>
+                            <div class="col-lg-3 col-12 mb-2 text-lg-end">
+                                <button type="button" (click)="searchData()" class="btn btn-warning btn-sm text-uppercase" title="Search" [disabled]="loading"><i class="fas" [class.fa-search]="!loading" [class.fa-spinner]="loading" [class.fa-spin]="loading"></i></button>
+                                <button type="button" (click)="reset()" style="margin-left: 10px;" class="btn btn-primary btn-sm text-uppercase" title="Reset" [disabled]="loading"><i class="fas fa-retweet"></i></button>
+                                <a routerLink="/create-quotation" style="margin-left: 10px;" class="btn btn-success btn-sm text-uppercase" title="New Quotation"><i class="fas fa-plus"></i> New Quotation</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-card-body p-3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped position-relative ql-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase whitespace-nowrap">S.NO</th>
+                                        <th class="text-uppercase whitespace-nowrap">Quote No</th>
+                                        <th class="text-uppercase whitespace-nowrap">Customer</th>
+                                        <th class="text-uppercase whitespace-nowrap">Event</th>
+                                        <th class="text-uppercase whitespace-nowrap">Event Dates</th>
+                                        <th class="text-uppercase whitespace-nowrap text-center">Lines</th>
+                                        <th class="text-uppercase whitespace-nowrap text-center">Pax</th>
+                                        <th class="text-uppercase whitespace-nowrap text-end">Total</th>
+                                        <th class="text-uppercase whitespace-nowrap">Status</th>
+                                        <th class="text-uppercase whitespace-nowrap">Quote Date</th>
+                                        <th class="text-uppercase whitespace-nowrap">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p, totalItems: total }; index as i">
+                                        <td class="whitespace-nowrap">{{(p-1)*10 + i + 1}}</td>
+                                        <td class="whitespace-nowrap fw-bold">{{user?.quotation_no}}</td>
+                                        <td class="whitespace-nowrap">
+                                            {{user?.customer_name}}<br>
+                                            <small class="text-muted">{{user?.customer_phone}}</small>
+                                        </td>
+                                        <td>{{user?.event_title || '-'}}<br><small class="text-muted">{{user?.venue}}<span *ngIf="user?.venue && user?.city">, </span>{{user?.city}}</small></td>
+                                        <td class="whitespace-nowrap">{{user?.display_event_dates}}</td>
+                                        <td class="text-center">{{user?.items_count}}</td>
+                                        <td class="text-center">{{user?.total_pax | number}}</td>
+                                        <td class="text-end whitespace-nowrap fw-bold">{{user?.display_total}}<br><small class="text-muted fw-normal">{{user?.gst_type==='extra' ? '+ GST' : 'incl. GST'}}</small></td>
+                                        <td class="whitespace-nowrap">
+                                            <div class="dropdown">
+                                                <span class="badge {{badgeClass(user?.quotation_status)}} ql-status" [class.ql-disabled]="busy" data-bs-toggle="dropdown" role="button">{{user?.quotation_status | titlecase}} <i class="fas fa-caret-down"></i></span>
+                                                <ul class="dropdown-menu">
+                                                    <li *ngFor="let s of statuses"><a class="dropdown-item" href="javascript:;" (click)="changeStatus(user, s)">{{s | titlecase}}</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="whitespace-nowrap">{{user?.display_quotation_date}}</td>
+                                        <td class="whitespace-nowrap">
+                                            <button type="button" (click)="generatePdf(user.id)" class="ql-icon-btn text-success" title="PDF / Share" [disabled]="busy || pdfLoading"><i class="far fa-file-pdf"></i></button>
+                                            <a routerLink="/edit-quotation/{{user?.id}}" class="ql-icon-btn text-info" title="Edit"><i class="far fa-edit"></i></a>
+                                            <button type="button" (click)="duplicate(user.id)" class="ql-icon-btn text-warning" title="Duplicate" [disabled]="busy"><i class="far fa-copy"></i></button>
+                                            <button type="button" (click)="Delete(user.id)" class="ql-icon-btn text-red" title="Delete" [disabled]="busy"><i class="far fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="users?.length === 0"><td colspan="11" class="text-center text-muted py-4">No quotations yet. Click <b>New Quotation</b> to create one.</td></tr>
+                                    <tr><td colspan="11"><div class="pagiation"><pagination-controls (pageChange)="pageChangeEvent($event)"></pagination-controls></div></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- main Area :: End -->
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</main>
+
+<!-- ===== PDF preview + share modal ===== -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="quotationPdfModal">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0 text-bg-light align-items-center">
+                <div class="d-flex justify-content-between w-100 me-3 align-items-center">
+                    <h4 class="modal-title font-16 mb-0">
+                        Estimate PDF
+                        <span *ngIf="pdfQuotation" class="text-muted font-12 ms-2">{{pdfQuotation?.quotation_no}} · {{pdfQuotation?.customer_name}}</span>
+                    </h4>
+                    <div *ngIf="safePdfUrl">
+                        <button type="button" (click)="shareWhatsApp()" class="btn btn-success btn-sm text-uppercase" title="Send on WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                        <button type="button" (click)="openPdf()" class="btn btn-primary btn-sm text-uppercase ms-2" title="Open / Download"><i class="fas fa-download"></i> Download</button>
+                        <button type="button" (click)="copyLink()" class="btn btn-secondary btn-sm text-uppercase ms-2" title="Copy PDF link"><i class="fas fa-link"></i> Copy Link</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-close font12" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="pdfLoading" class="text-center py-5 text-muted">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <div class="mt-2">Generating PDF…</div>
+                </div>
+                <iframe *ngIf="safePdfUrl" [src]="safePdfUrl" width="100%" height="720" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
