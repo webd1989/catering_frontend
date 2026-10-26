@@ -68,7 +68,10 @@ label { color: var(--mi-muted); font-size: 12.5px; letter-spacing: .5px; }
 ::-webkit-scrollbar-thumb:hover { background: #b7c3aa; }
 
 /* ---------- 3. Top bar / navigation ----------------------------------- */
-.top-bar .action-group { min-height: 70px; }
+.top-bar .action-group { min-height: 70px; width: 100%; }
+.top-bar .group1 { padding-left: 0; }
+.top-bar .group2 { padding-right: 4px; }
+.top-bar .navbar-brand { margin-left: 0; }
 .top-bar .navbar-brand { width: 170px !important; min-width: 150px; margin-right: 18px; }
 .top-bar .navbar-brand img { max-height: 56px; width: auto; transition: transform .2s ease; }
 .top-bar .navbar-brand:hover img { transform: scale(1.04); }
@@ -81,6 +84,7 @@ label { color: var(--mi-muted); font-size: 12.5px; letter-spacing: .5px; }
 .top-bar .group2 .dropdown-menu .bg-lightblue { background: var(--mi-green-soft) !important; border-radius: 6px; margin-bottom: 4px; }
 .top-bar .group2 .dropdown-menu .bg-lightblue .dropdown-item { background: transparent; color: var(--mi-green-dark); font-weight: 600; }
 .top-bar {
+  padding: 0 28px !important;            /* keep logo & avatar off the screen edges */
   background: var(--mi-card);
   border-bottom: 1px solid var(--mi-line);
   box-shadow: 0 2px 12px rgba(31, 42, 26, .05);
@@ -417,6 +421,7 @@ main { animation: miPage .25s ease both; }
 @keyframes miPage { from { opacity: 0; } to { opacity: 1; } }
 
 @media (max-width: 1399px) {
+  .top-bar { padding: 0 20px !important; }
   .top-bar .navbar-nav .nav-link { font-size: 14px; padding: 8px 10px !important; }
   .top-bar .navbar-brand { width: 150px !important; }
 }
@@ -518,6 +523,7 @@ main { animation: miPage .25s ease both; }
   .page-card-title .btn { margin-left: 0 !important; margin-right: 8px; }
 
   /* Header: logo + avatar fit */
+  .top-bar { padding: 0 14px !important; }
   .top-bar .navbar-brand { width: 130px !important; min-width: 110px; }
   .top-bar .action-group { min-height: 60px; }
   .top-bar .user-profile { width: 38px !important; height: 38px !important; min-width: 38px; flex-basis: 38px; }
