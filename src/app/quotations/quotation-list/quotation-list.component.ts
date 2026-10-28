@@ -126,6 +126,20 @@ export class QuotationListComponent implements OnInit, OnDestroy {
     }, () => { this.busy = false; this.toastr.error('Server Error', 'Error'); });
   }
 
+  convert(row: any) {
+    if (this.busy) { return; }
+    Swal.fire({ title: 'Convert to Booking?', html: '<b>' + row.quotation_no + '</b> — ' + row.customer_name + '<br><small>A booking with all functions will be created and the quotation marked Converted.</small>',
+      icon: 'question', showCancelButton: true, confirmButtonText: 'Yes, create booking', cancelButtonText: 'No' }).then(res => {
+      if (!res.value) { return; }
+      this.busy = true;
+      this.appService.postData('quotation/convert', { token: localStorage.getItem('token'), quotation_id: row.id }).pipe(takeUntil(this.destroy$)).subscribe(r2 => {
+        this.busy = false; const x: any = r2;
+        if (x.success) { this.toastr.success(x.message, 'Success'); this.router.navigate(['/booking-menus/' + x.booking_id]); }
+        else { this.toastr.error(x.message, 'Error'); if (x.booking_id) { this.router.navigate(['/booking-menus/' + x.booking_id]); } }
+      }, () => { this.busy = false; this.toastr.error('Server Error', 'Error'); });
+    });
+  }
+
   Delete(id: number) {
     Swal.fire({
       title: 'Are you sure?',

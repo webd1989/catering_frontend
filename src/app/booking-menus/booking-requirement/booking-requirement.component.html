@@ -1,0 +1,109 @@
+<main>
+    <div class="main-wrapper">
+        <div id="content">
+            <app-header></app-header>
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <div class="main-area position-relative">
+
+                    <div class="page-card-title">
+                        <div class="row align-items-center">
+                            <div class="col-lg-5 col-12 mb-2">
+                                <h4 class="font-16 mb-0">{{isMat() ? 'Raw Material' : 'Equipment'}} — Whole Booking</h4>
+                                <div class="br-sub" *ngIf="booking"><b>{{booking?.title}}</b> · {{booking?.customer_name}} · {{booking?.phone}}<span *ngIf="booking?.location"> · {{booking?.location}}</span></div>
+                            </div>
+                            <div class="col-lg-7 col-12 mb-2 br-toolbar">
+                                <div class="br-switch">
+                                    <button type="button" class="btn btn-sm" [class.btn-primary]="!isMat()" [class.btn-light]="isMat()" (click)="switchType('equipment')"><i class="fas fa-toolbox"></i> Equipment</button>
+                                    <button type="button" class="btn btn-sm" [class.btn-primary]="isMat()" [class.btn-light]="!isMat()" (click)="switchType('material')"><i class="fas fa-shopping-basket"></i> Raw Material</button>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm text-uppercase" (click)="generatePdf()" [disabled]="pdfLoading || loading"><i class="far fa-file-pdf"></i> {{isMat() ? 'Purchase Indent' : 'Checklist'}} PDF</button>
+                                <a routerLink="/booking-menus/{{bookingId}}" class="btn btn-secondary btn-sm text-uppercase"><i class="fas fa-arrow-left"></i> Booking Menus</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-card-body p-20">
+                        <div class="row br-tiles">
+                            <div class="col-6 col-lg-3"><div class="br-tile"><div class="br-v">{{summary.functions}}</div><div class="br-l">Functions Covered</div></div></div>
+                            <div class="col-6 col-lg-3"><div class="br-tile"><div class="br-v">{{summary.lines}}</div><div class="br-l">{{isMat() ? 'Material' : 'Equipment'}} Lines</div></div></div>
+                            <div class="col-6 col-lg-3"><div class="br-tile" [class.br-bad]="summary.short_lines > 0"><div class="br-v">{{summary.short_lines}}</div><div class="br-l">Short In Stock</div></div></div>
+                            <div class="col-6 col-lg-3" *ngIf="isMat()"><div class="br-tile br-good"><div class="br-v">{{inr(summary.est_cost)}}</div><div class="br-l">Est. Material Cost</div></div></div>
+                            <div class="col-6 col-lg-3" *ngIf="!isMat()"><div class="br-tile" [class.br-warn]="summary.missing > 0"><div class="br-v">{{summary.missing}}</div><div class="br-l">Functions Without Menu</div></div></div>
+                        </div>
+
+                        <div class="br-fns" *ngIf="functions.length">
+                            <span class="badge bg-success" *ngFor="let f of functions">{{f.label}}</span>
+                            <span class="badge bg-danger" *ngFor="let m of missing" title="No menu yet">{{m}}</span>
+                        </div>
+                        <div class="alert alert-info br-note" *ngIf="!isMat()">Equipment is summed for functions on the <b>same day</b> and the maximum across days is taken (equipment is reused day to day). Raw material is summed across all functions.</div>
+
+                        <div class="br-filters">
+                            <input type="text" class="form-control form-control-sm" placeholder="Search" [(ngModel)]="search">
+                            <label class="br-check"><input type="checkbox" class="form-check-input" [(ngModel)]="onlyShort"> Only shortage</label>
+                        </div>
+
+                        <div *ngIf="loading" class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+
+                        <ng-container *ngIf="!loading">
+                            <div *ngFor="let g of visibleGroups()" class="card border-radius-10 mb-3 main-bg-color br-group">
+                                <div class="br-group-head" (click)="toggle(g.category)">
+                                    <span><i class="fas" [class.fa-chevron-down]="!collapsed[g.category]" [class.fa-chevron-right]="collapsed[g.category]"></i> {{g.category}}</span>
+                                    <span class="br-meta">
+                                        <span class="badge bg-dark" *ngIf="isMat()">{{inr(g.est_cost)}}</span>
+                                        <span class="badge bg-secondary">{{rowsOf(g).length}}</span>
+                                        <span class="badge bg-danger" *ngIf="g.short > 0">{{g.short}} short</span>
+                                    </span>
+                                </div>
+                                <div class="table-responsive" *ngIf="!collapsed[g.category]">
+                                    <table class="table table-bordered mb-0">
+                                        <thead><tr>
+                                            <th class="text-uppercase">{{isMat() ? 'Material' : 'Equipment'}}</th>
+                                            <th class="text-uppercase">Unit</th>
+                                            <th class="text-uppercase text-end">Needed</th>
+                                            <th class="text-uppercase text-end">In Stock</th>
+                                            <th class="text-uppercase text-end">{{isMat() ? 'To Buy' : 'Short'}}</th>
+                                            <th class="text-uppercase text-end" *ngIf="isMat()">Est. Cost</th>
+                                            <th class="text-uppercase">Functions</th>
+                                        </tr></thead>
+                                        <tbody>
+                                            <tr *ngFor="let r of rowsOf(g)" [class.br-row-short]="r.shortage > 0">
+                                                <td class="fw-bold">{{nameOf(r)}} <small class="text-muted d-block" *ngIf="r.name_hindi">{{r.name_hindi}}</small></td>
+                                                <td>{{r.unit || '-'}}</td>
+                                                <td class="text-end fw-bold">{{fmt(r.needed)}}</td>
+                                                <td class="text-end">{{fmt(r.in_stock)}}</td>
+                                                <td class="text-end"><span *ngIf="r.shortage > 0" class="badge bg-danger">{{fmt(r.shortage)}}</span><span *ngIf="r.shortage == 0" class="text-success"><i class="fas fa-check"></i></span></td>
+                                                <td class="text-end" *ngIf="isMat()">{{r.est_cost > 0 ? inr(r.est_cost) : '-'}}</td>
+                                                <td class="br-fn-cell"><small>{{r.functions}}</small></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div *ngIf="visibleGroups().length === 0" class="text-center text-muted py-4">Nothing to show — create menus for the functions first.</div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</main>
+
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="bookingReqPdfModal">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0 text-bg-light align-items-center">
+                <div class="d-flex justify-content-between w-100 me-3 align-items-center">
+                    <h4 class="modal-title font-16 mb-0">{{isMat() ? 'Purchase Indent' : 'Equipment Checklist'}} — Whole Booking</h4>
+                    <button *ngIf="safePdfUrl" type="button" (click)="openPdf()" class="btn btn-primary btn-sm text-uppercase"><i class="fas fa-download"></i> Download</button>
+                </div>
+                <button type="button" class="btn-close font12" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="pdfLoading" class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+                <iframe *ngIf="safePdfUrl" [src]="safePdfUrl" width="100%" height="720" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

@@ -51,6 +51,12 @@ import { DemandComponent } from './demand/demand.component';
 import { BookingCalenderComponent } from './booking-calender/booking-calender.component';
 import { QuotationListComponent } from './quotations/quotation-list/quotation-list.component';
 import { QuotationFormComponent } from './quotations/quotation-form/quotation-form.component';
+import { ItemEquipmentComponent } from './equipment/item-equipment/item-equipment.component';
+import { MenuEquipmentComponent } from './equipment/menu-equipment/menu-equipment.component';
+import { MenuMaterialComponent } from './equipment/menu-material/menu-material.component';
+import { BookingMenusComponent } from './booking-menus/booking-menus.component';
+import { BookingRequirementComponent } from './booking-menus/booking-requirement/booking-requirement.component';
+import { EquipmentIssueComponent } from './booking-menus/equipment-issue/equipment-issue.component';
 
 
 
@@ -97,7 +103,13 @@ import { QuotationFormComponent } from './quotations/quotation-form/quotation-fo
     DemandComponent,
     BookingCalenderComponent,
     QuotationListComponent,
-    QuotationFormComponent
+    QuotationFormComponent,
+    ItemEquipmentComponent,
+    MenuEquipmentComponent,
+    MenuMaterialComponent,
+    BookingMenusComponent,
+    BookingRequirementComponent,
+    EquipmentIssueComponent
   ],
   imports: [
     BrowserModule,

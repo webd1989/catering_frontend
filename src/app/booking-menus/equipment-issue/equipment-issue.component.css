@@ -1,0 +1,64 @@
+.ei-sub { font-size: 13px; color: #5c6a56; margin-top: 2px; }
+.ei-toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+.ei-status { font-size: 11px; vertical-align: middle; margin-left: 6px; letter-spacing: .5px; }
+
+/* step strip */
+.ei-steps { display: flex; gap: 6px; margin-bottom: 14px; }
+.ei-step { flex: 1; background: #fff; border: 1px solid #dde5d4; border-radius: 10px; padding: 8px 12px; font-weight: 600; color: #8a948a; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ei-step span { width: 24px; height: 24px; border-radius: 50%; background: #eef4e7; color: #8a948a; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+.ei-step small { flex-basis: 100%; font-weight: 400; font-size: 11px; color: #9aa39a; }
+.ei-step.on { border-color: #4f7f2a; color: #2f4a1b; background: #f3f9ee; } .ei-step.on span { background: #4f7f2a; color: #fff; }
+.ei-step.done { color: #2f4a1b; } .ei-step.done span { background: #2f4a1b; color: #fff; }
+
+.ei-fns { display: flex; flex-wrap: wrap; gap: 6px; } .ei-fns .badge { border: 1px solid #dde5d4; font-weight: 500; }
+.ei-note { font-size: 13px; border-radius: 10px; }
+
+/* tiles */
+.ei-tiles { margin-bottom: 8px; }
+.ei-tile { background: #fff; border: 1px solid #dde5d4; border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; }
+.ei-v { font-size: 24px; font-weight: 700; color: #141c10; line-height: 1.1; } .ei-v small { font-size: 13px; color: #8a948a; font-weight: 500; }
+.ei-l { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #5c6a56; margin-top: 4px; }
+.ei-bar { height: 5px; background: #eef4e7; border-radius: 3px; margin-top: 8px; overflow: hidden; } .ei-bar div { height: 100%; background: #4f7f2a; transition: width .3s; }
+.ei-good { border-color: #cfe0bd; background: #f3f9ee; } .ei-good .ei-v { color: #2f4a1b; }
+
+/* filters */
+.ei-filters { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+.ei-filters input[type=text] { width: 260px; }
+.ei-check { display: flex; align-items: center; gap: 6px; font-size: 13px; margin: 0; cursor: pointer; }
+
+/* groups / table */
+.ei-group { overflow: hidden; }
+.ei-group-head { display: flex; align-items: center; gap: 8px; padding: 10px 16px; font-weight: 600; color: #2f4a1b; background: #eef4e7; }
+.ei-group-head i { color: #4f7f2a; }
+.ei-table td { vertical-align: middle; }
+.ei-fn { font-size: 11px; color: #8a948a; }
+.ei-num { width: 90px; text-align: right; display: inline-block; font-weight: 600; }
+.ei-dmg { border-color: #e7b1ac; }
+.ei-tick-h { width: 70px; }
+.ei-chk { width: 34px; height: 34px; border-radius: 8px; border: 2px solid #c9d3c0; background: #fff; color: transparent; cursor: pointer; transition: all .15s; }
+.ei-chk.on { background: #4f7f2a; border-color: #4f7f2a; color: #fff; }
+.ei-chk:disabled { opacity: .5; cursor: default; }
+.ei-x { border: 0; background: transparent; color: #b3261e; cursor: pointer; padding: 4px 8px; }
+tr.ei-done td { background: #f3f9ee !important; }
+tr.ei-zero td { opacity: .45; }
+tr.ei-short td.ei-qty input { border-color: #e7b1ac; }
+
+/* action bar */
+.ei-actions { position: sticky; bottom: 0; background: #fff; border: 1px solid #dde5d4; border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; box-shadow: 0 -4px 16px rgba(20, 28, 16, .06); z-index: 5; }
+.ei-total { color: #5c6a56; font-size: 14px; }
+.ei-btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ei-retdate { display: flex; align-items: center; gap: 6px; } .ei-retdate input { width: 150px; }
+
+@media (max-width: 767px) {
+  .ei-toolbar { justify-content: flex-start; }
+  .ei-steps { flex-wrap: wrap; } .ei-step { flex: 1 1 45%; } .ei-step small { display: none; }
+  .ei-filters input[type=text] { width: 100%; }
+  .ei-actions { flex-direction: column; align-items: stretch; }
+  .ei-btns { flex-direction: column; align-items: stretch; } .ei-btns .btn { width: 100%; }
+  .ei-retdate input { width: 100%; }
+  /* mobile card rows: tick buttons side by side */
+  .ei-table td.ei-tick { display: inline-flex !important; flex-direction: column; align-items: center; gap: 6px; width: 33% !important; border: 0 !important; padding: 8px 0 !important; }
+  .ei-table td.ei-tick::before { display: block !important; text-align: center; white-space: nowrap; font-size: 10px; width: auto !important; }
+  .ei-chk { width: 44px; height: 44px; }
+  .ei-num { width: 100%; }
+}

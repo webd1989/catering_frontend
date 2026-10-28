@@ -92,6 +92,14 @@ export class MenuListComponent implements OnInit,OnDestroy {
   }
   
  
+  toggleTemplate(user:any){
+    const data = { token: localStorage.getItem('token'), menu_id: user.id };
+    this.appService.postData('menu/template/toggle', data).pipe(takeUntil(this.destroy$)).subscribe(res=>{
+      var r:any=res;
+      if(r.success){ user.is_template = r.is_template; this.toastr.success(r.message, 'Success'); }
+      else{ this.toastr.error(r.message, 'Error'); }
+    },error=>{ this.toastr.error('Server Error','Error'); });
+  }
   Delete(userID:string){
     Swal.fire({
       title: 'Are you sure?',

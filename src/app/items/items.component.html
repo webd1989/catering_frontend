@@ -46,6 +46,7 @@
                             <table class="table table-bordered table-striped position-relative">
                                 <thead>
                                     <tr>
+                                        <th class="text-uppercase whitespace-nowrap eq-th"><input type="checkbox" class="form-check-input" [checked]="eqAllOnPage()" (change)="eqToggleAll($any($event.target).checked)" title="Select all on this page"></th>
                                         <th class="text-uppercase whitespace-nowrap">S.NO</th>
                                         <th class="text-uppercase whitespace-nowrap">Title</th>
                                         <th class="text-uppercase whitespace-nowrap">Category</th>
@@ -57,7 +58,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p, totalItems: total }; index as i">
+                                    <tr *ngFor="let user of users | paginate: { itemsPerPage: 10, currentPage: p, totalItems: total }; index as i" [class.eq-row-sel]="eqIsSelected(user.id)">
+                                        <td class="whitespace-nowrap eq-td"><input type="checkbox" class="form-check-input" [checked]="eqIsSelected(user.id)" (change)="eqToggle(user)"></td>
                                         <td class="whitespace-nowrap">{{i+1}}</td>
                                       
                                 
@@ -71,6 +73,15 @@
                                         </td>
                                         <td class="text-capitalize whitespace-nowrap">{{user?.display_date}}</td>
                                         <td class="text-capitalize whitespace-nowrap">
+                                            <a routerLink="/item-equipment/{{user?.id}}" class="text-capitalize font-12 text-success me-3" title="Edit equipment mapping">
+                                                <i class="fas fa-toolbox"></i>
+                                            </a>
+                                            <a routerLink="/item-requirement/{{user?.id}}" class="text-capitalize font-12 text-warning me-3" title="Equipment requirement (this item)">
+                                                <i class="fas fa-clipboard-list"></i>
+                                            </a>
+                                            <a routerLink="/item-material/{{user?.id}}" class="text-capitalize font-12 text-primary me-3" title="Raw material requirement (this item)">
+                                                <i class="fas fa-shopping-basket"></i>
+                                            </a>
                                             <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#createTemplate" (click)="getQuotation(user.id)" class="text-capitalize font-12 text-info me-3">
                                                 <i class="far fa-edit"></i>
                                             </a>
@@ -95,6 +106,20 @@
         <app-footer></app-footer>
     </div>
 </main>
+
+<!-- Equipment calculator selection bar -->
+<div class="eq-bar" *ngIf="eqCount() > 0">
+    <div class="eq-bar-left">
+        <span class="badge bg-success">{{eqCount()}}</span> item<span *ngIf="eqCount() != 1">s</span> selected
+        <a href="javascript:;" (click)="eqClear()" class="ms-2 small">clear</a>
+    </div>
+    <div class="eq-bar-right">
+        <label class="mb-0 me-1 text-uppercase font-12">Pax</label>
+        <input type="number" min="1" class="form-control form-control-sm eq-pax" [(ngModel)]="eqPax">
+        <button type="button" class="btn btn-success btn-sm text-uppercase" (click)="eqOpen()"><i class="fas fa-toolbox"></i> Equipment</button>
+        <button type="button" class="btn btn-warning btn-sm text-uppercase" (click)="eqOpenMaterial()"><i class="fas fa-shopping-basket"></i> Raw Material</button>
+    </div>
+</div>
 <!-- CreateTemplate Edit Modal Starts  -->
 <div class="modal fade" id="createTemplate">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">

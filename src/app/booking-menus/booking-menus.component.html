@@ -1,0 +1,144 @@
+<main>
+    <div class="main-wrapper">
+        <div id="content">
+            <app-header></app-header>
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <div class="main-area position-relative">
+
+                    <div class="page-card-title">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-12 mb-2">
+                                <h4 class="font-16 mb-0">Booking Menus</h4>
+                                <div class="bm-sub" *ngIf="booking">
+                                    <b>{{booking?.booking_title}}</b> · {{booking?.name}} · {{booking?.phone}}
+                                    <span *ngIf="booking?.location"> · {{booking?.location}}</span>
+                                    <span *ngIf="booking?.quotation_no" class="badge bg-secondary ms-1">{{booking?.quotation_no}}</span>
+                                    <span class="badge ms-1" [class.bg-success]="booking?.booking_status==='confirmed'" [class.bg-warning]="booking?.booking_status!=='confirmed'">{{booking?.booking_status | titlecase}}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12 mb-2 bm-toolbar">
+                                <a routerLink="/booking-requirement/{{bookingId}}" [queryParams]="{type:'equipment'}" class="btn btn-success btn-sm text-uppercase"><i class="fas fa-toolbox"></i> Equipment (All)</a>
+                                <a routerLink="/booking-requirement/{{bookingId}}" [queryParams]="{type:'material'}" class="btn btn-warning btn-sm text-uppercase"><i class="fas fa-shopping-basket"></i> Raw Material (All)</a>
+                                <a routerLink="/equipment-issue/{{bookingId}}" class="btn btn-primary btn-sm text-uppercase" title="Equipment issue / dispatch checklist for the team"><i class="fas fa-truck-loading"></i> Issue Checklist</a>
+                                <a routerLink="/booking-list" class="btn btn-secondary btn-sm text-uppercase"><i class="fas fa-arrow-left"></i> Bookings</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-card-body p-20">
+
+                        <!-- progress -->
+                        <div class="card border-radius-10 mb-3 main-bg-color">
+                            <div class="card-body p-20 bm-progress">
+                                <div class="bm-stats">
+                                    <div><div class="bm-v">{{summary.functions}}</div><div class="bm-l">Functions</div></div>
+                                    <div><div class="bm-v text-success">{{summary.final}}</div><div class="bm-l">Menu Final</div></div>
+                                    <div><div class="bm-v text-warning">{{summary.menus - summary.final}}</div><div class="bm-l">Draft</div></div>
+                                    <div><div class="bm-v" [class.text-danger]="summary.pending > 0">{{summary.pending}}</div><div class="bm-l">Menu Pending</div></div>
+                                    <div><div class="bm-v">{{summary.total_pax | number}}</div><div class="bm-l">Total Pax</div></div>
+                                    <div *ngIf="booking?.total"><div class="bm-v">{{inr(booking?.total)}}</div><div class="bm-l">Booking Value</div></div>
+                                </div>
+                                <div class="bm-bar"><div class="bm-bar-fill" [style.width.%]="progress()"></div></div>
+                                <div class="bm-bar-label">{{summary.menus}} of {{summary.functions}} functions have a menu ({{progress()}}%)</div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="loading" class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+
+                        <!-- day-wise functions -->
+                        <div *ngFor="let d of days" class="bm-day">
+                            <div class="bm-day-head"><i class="far fa-calendar-alt"></i> {{d.display_date}} <span class="badge bg-secondary">{{d.functions.length}} function<span *ngIf="d.functions.length != 1">s</span></span></div>
+                            <div class="row">
+                                <div class="col-lg-6 col-xl-4" *ngFor="let fn of d.functions">
+                                    <div class="card border-radius-10 mb-3 main-bg-color bm-fn" [class.bm-fn-final]="fn.menu_state==='final'" [class.bm-fn-draft]="fn.menu_state==='draft'" [class.bm-fn-pending]="fn.menu_state==='pending'">
+                                        <div class="bm-fn-head">
+                                            <div>
+                                                <div class="bm-fn-name">{{fn.function_name}}</div>
+                                                <div class="bm-fn-meta">
+                                                    <span *ngIf="fn.event_time"><i class="far fa-clock"></i> {{fn.event_time}}</span>
+                                                    <span *ngIf="fn.venue"><i class="fas fa-map-marker-alt"></i> {{fn.venue}}<span *ngIf="fn.sub_venue"> – {{fn.sub_venue}}</span></span>
+                                                </div>
+                                            </div>
+                                            <span class="badge bm-state" [class.bg-success]="fn.menu_state==='final'" [class.bg-warning]="fn.menu_state==='draft'" [class.bg-danger]="fn.menu_state==='pending'">
+                                                {{fn.menu_state==='pending' ? 'Menu Pending' : (fn.menu_state==='final' ? 'Menu Final' : 'Draft')}}
+                                            </span>
+                                        </div>
+                                        <div class="bm-fn-body">
+                                            <div class="bm-kv"><span>Pax</span><b>{{fn.pax | number}}</b></div>
+                                            <div class="bm-kv"><span>Rate / Pax</span><b>{{fn.rate > 0 ? inr(fn.rate) : '-'}}</b></div>
+                                            <div class="bm-kv"><span>Amount</span><b>{{inr(fn.total)}}</b></div>
+                                            <div class="bm-kv" *ngIf="fn.menu_id"><span>Menu</span><b>#{{fn.menu_id}} · {{fn.menu_items_count}} items</b></div>
+                                            <div class="bm-kv" *ngIf="fn.menu_updated"><span>Updated</span><b>{{fn.menu_updated}}</b></div>
+                                        </div>
+                                        <div class="bm-fn-actions">
+                                            <ng-container *ngIf="!fn.menu_id">
+                                                <button type="button" class="btn btn-primary btn-sm" (click)="openCreate(fn)" [disabled]="busy"><i class="fas fa-plus"></i> Create Menu</button>
+                                                <button type="button" class="btn btn-light btn-sm" (click)="openLink(fn)" [disabled]="busy" title="Attach an existing menu"><i class="fas fa-link"></i> Link</button>
+                                            </ng-container>
+                                            <ng-container *ngIf="fn.menu_id">
+                                                <a routerLink="/edit-menu/{{fn.menu_id}}" class="btn btn-primary btn-sm"><i class="far fa-edit"></i> Edit Menu</a>
+                                                <button *ngIf="fn.menu_state!=='final'" type="button" class="btn btn-success btn-sm" (click)="setStatus(fn,'final')" [disabled]="busy"><i class="fas fa-check"></i> Final</button>
+                                                <button *ngIf="fn.menu_state==='final'" type="button" class="btn btn-light btn-sm" (click)="setStatus(fn,'draft')" [disabled]="busy">Reopen</button>
+                                                <a routerLink="/menu-equipment/{{fn.menu_id}}" class="btn btn-light btn-sm" title="Equipment"><i class="fas fa-toolbox"></i></a>
+                                                <a routerLink="/menu-material/{{fn.menu_id}}" class="btn btn-light btn-sm" title="Raw material"><i class="fas fa-shopping-basket"></i></a>
+                                                <button type="button" class="btn btn-light btn-sm text-danger" (click)="unlink(fn)" [disabled]="busy" title="Unlink menu"><i class="fas fa-unlink"></i></button>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!loading && days.length === 0" class="text-center text-muted py-4">This booking has no functions yet — add them from <a routerLink="/booking-list">Bookings</a> → Edit.</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</main>
+
+<!-- create / link modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="menuCreateModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 text-bg-light align-items-center">
+                <h4 class="modal-title font-16 mb-0">{{mode==='create' ? 'Create Menu' : 'Link Existing Menu'}} <small class="text-muted" *ngIf="sel">— {{sel?.function_name}}, {{shortDate(sel?.event_date)}}, {{sel?.pax}} pax</small></h4>
+                <button type="button" class="btn-close font12" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ng-container *ngIf="mode==='create'">
+                    <div class="form-group">
+                        <label class="text-uppercase font-weight-400 font-12 mb-10">Menu Title</label>
+                        <input type="text" class="form-control" [(ngModel)]="form.title">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-uppercase font-weight-400 font-12 mb-10">Start From Template <small class="text-muted">(optional)</small></label>
+                        <select class="form-select" [(ngModel)]="form.template_id">
+                            <option value="">— Blank menu —</option>
+                            <option *ngFor="let t of templates" value="{{t.id}}">{{t.title}}</option>
+                        </select>
+                        <small class="text-muted">Template items are copied; customer, date and pax come from the booking. You can edit everything after.</small>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="mode==='link'">
+                    <div class="form-group">
+                        <label class="text-uppercase font-weight-400 font-12 mb-10">Select Menu</label>
+                        <select class="form-select" [(ngModel)]="form.link_menu_id">
+                            <option value="">— Select —</option>
+                            <option *ngFor="let m of standalone" value="{{m.id}}">#{{m.id}} {{m.title}} <span *ngIf="m.customer_name">· {{m.customer_name}}</span> <span *ngIf="m.function_date">· {{m.function_date}}</span></option>
+                        </select>
+                        <small class="text-muted">Only menus not linked to any booking are listed. Customer / date / pax will be updated from this booking.</small>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary btn-sm text-uppercase" data-bs-dismiss="modal" [disabled]="busy">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm text-uppercase" (click)="submitModal()" [disabled]="busy">
+                    <i class="fas" [class.fa-spinner]="busy" [class.fa-spin]="busy" [class.fa-check]="!busy"></i> {{mode==='create' ? 'Create & Open' : 'Link'}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<main>
+    <div class="main-wrapper">
+        <div id="content">
+            <app-header></app-header>
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <div class="main-area position-relative">
+
+                    <div class="page-card-title">
+                        <div class="row align-items-center">
+                            <div class="col-lg-7 col-12 mb-2">
+                                <h4 class="font-16 mb-0">Item Equipment</h4>
+                                <div class="ie-sub" *ngIf="item">
+                                    <b>{{item?.title}}</b>
+                                    <span class="text-muted"> · {{item?.cate_name}}<span *ngIf="item?.sub_cate_name"> › {{item?.sub_cate_name}}</span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-12 mb-2 text-lg-end">
+                                <a routerLink="/menu-item-details/{{itemId}}" class="btn btn-primary btn-sm text-uppercase"><i class="fas fa-mortar-pestle"></i> Recipe</a>
+                                <a routerLink="/items" class="btn btn-secondary btn-sm text-uppercase ms-2"><i class="fas fa-arrow-left"></i> Items</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-card-body p-20">
+
+                        <!-- add / edit -->
+                        <div class="card border-radius-10 mb-4 main-bg-color">
+                            <div class="card-body p-20">
+                                <h5 class="ie-section-title">{{editingId ? 'Edit Equipment' : 'Add Equipment'}}</h5>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Equipment <span class="text-danger">*</span></label>
+                                            <select class="form-select" [(ngModel)]="form.equipment_id" [disabled]="editingId > 0">
+                                                <option value="">— Select equipment —</option>
+                                                <option *ngFor="let e of availableEquipments()" value="{{e.id}}">{{e.equipment_category}} › {{e.material_name}} <span *ngIf="e.unit">({{e.unit}})</span></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6">
+                                        <div class="form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Qty <span class="text-danger">*</span></label>
+                                            <input type="number" min="0.01" step="1" class="form-control" [(ngModel)]="form.qty">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Basis</label>
+                                            <select class="form-select" [(ngModel)]="form.qty_basis">
+                                                <option value="fixed">Fixed (per counter / dish)</option>
+                                                <option value="per_100_pax">Per 100 pax (scales with guests)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Note</label>
+                                            <input type="text" class="form-control" [(ngModel)]="form.note" placeholder="e.g. Buffet / Kitchen / Live counter">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ie-actions">
+                                    <button type="button" class="btn btn-primary btn-sm text-uppercase" (click)="save()" [disabled]="busy">
+                                        <i class="fas" [class.fa-save]="!busy" [class.fa-spinner]="busy" [class.fa-spin]="busy"></i> {{editingId ? 'Update' : 'Add'}}
+                                    </button>
+                                    <button type="button" *ngIf="editingId" class="btn btn-secondary btn-sm text-uppercase" (click)="cancelEdit()" [disabled]="busy">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- list -->
+                        <div class="card border-radius-10 mb-4 main-bg-color">
+                            <div class="card-body p-20">
+                                <div class="ie-list-head">
+                                    <h5 class="ie-section-title mb-0">Mapped Equipment <span class="badge bg-secondary">{{records.length}}</span></h5>
+                                    <input type="text" class="form-control form-control-sm ie-search" placeholder="Search" [(ngModel)]="search">
+                                </div>
+                                <div *ngIf="loading" class="text-center py-4 text-muted"><i class="fas fa-spinner fa-spin"></i> Loading…</div>
+                                <div class="table-responsive" *ngIf="!loading">
+                                    <table class="table table-bordered table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-uppercase">S.No</th>
+                                                <th class="text-uppercase">Category</th>
+                                                <th class="text-uppercase">Equipment</th>
+                                                <th class="text-uppercase text-end">Qty</th>
+                                                <th class="text-uppercase">Basis</th>
+                                                <th class="text-uppercase">Note</th>
+                                                <th class="text-uppercase text-end">In Stock</th>
+                                                <th class="text-uppercase">Source</th>
+                                                <th class="text-uppercase">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let r of filteredRecords(); index as i" [class.ie-editing]="r.id === editingId">
+                                                <td>{{i+1}}</td>
+                                                <td>{{r.equipment_category || '-'}}</td>
+                                                <td class="fw-bold">{{r.material_name}}</td>
+                                                <td class="text-end">{{r.qty | number}} <small class="text-muted">{{r.unit}}</small></td>
+                                                <td><span class="badge" [class.bg-info]="r.qty_basis==='per_100_pax'" [class.bg-secondary]="r.qty_basis!=='per_100_pax'">{{basisLabel(r.qty_basis)}}</span></td>
+                                                <td>{{r.note || '-'}}</td>
+                                                <td class="text-end">{{r.current_stock | number}}</td>
+                                                <td><small [class.text-muted]="r.is_auto==1" [class.text-success]="r.is_auto==0">{{r.is_auto==1 ? 'Auto rule' : 'Manual'}}</small></td>
+                                                <td class="whitespace-nowrap">
+                                                    <button type="button" class="ie-icon-btn text-info" (click)="edit(r)" [disabled]="busy" title="Edit"><i class="far fa-edit"></i></button>
+                                                    <button type="button" class="ie-icon-btn text-red" (click)="remove(r)" [disabled]="busy" title="Remove"><i class="far fa-trash-alt"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="records.length === 0"><td colspan="9" class="text-center text-muted py-4">No equipment mapped yet. Add from the form above.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</main>

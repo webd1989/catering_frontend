@@ -92,7 +92,7 @@ export class EquipmentsComponent implements OnInit,OnDestroy {
  }
   setHeading(){
     this.action = 'Add';
-    this.heading = 'Create Raw Material';
+    this.heading = 'Add Equipments';
     this.cleanForm();
   }
   cleanForm(){
@@ -211,7 +211,7 @@ export class EquipmentsComponent implements OnInit,OnDestroy {
     });
   }
   getQuotation(id:number){
-      this.heading = 'Edit Raw Material';
+      this.heading = 'Edit Equipment';
       this.action = 'Edit';
       const data = {
         token: localStorage.getItem('token'),

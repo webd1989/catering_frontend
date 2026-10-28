@@ -1,0 +1,30 @@
+.bm-sub { font-size: 13px; color: #5c6a56; margin-top: 2px; }
+.bm-toolbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.bm-progress { }
+.bm-stats { display: flex; flex-wrap: wrap; gap: 28px; margin-bottom: 12px; }
+.bm-v { font-size: 24px; font-weight: 700; color: #141c10; line-height: 1.1; }
+.bm-l { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #5c6a56; margin-top: 3px; }
+.bm-bar { height: 10px; background: #e6ecdf; border-radius: 999px; overflow: hidden; }
+.bm-bar-fill { height: 100%; background: linear-gradient(90deg, #4f7f2a, #8ab15c); border-radius: 999px; transition: width .5s ease; }
+.bm-bar-label { font-size: 12px; color: #5c6a56; margin-top: 6px; }
+.bm-day { margin-bottom: 8px; }
+.bm-day-head { font-weight: 700; color: #2f4a1b; letter-spacing: .5px; margin: 6px 0 12px; display: flex; align-items: center; gap: 10px; }
+.bm-day-head i { color: #4f7f2a; }
+.bm-fn { overflow: hidden; border-left: 5px solid #c9c9c9 !important; }
+.bm-fn-final { border-left-color: #2e8b57 !important; }
+.bm-fn-draft { border-left-color: #c9a227 !important; }
+.bm-fn-pending { border-left-color: #c0392b !important; }
+.bm-fn-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 14px 16px 8px; }
+.bm-fn-name { font-size: 17px; font-weight: 700; color: #141c10; }
+.bm-fn-meta { font-size: 12px; color: #5c6a56; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 2px; }
+.bm-state { white-space: nowrap; font-size: 11px; letter-spacing: .5px; }
+.bm-fn-body { padding: 0 16px 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+.bm-kv { display: flex; justify-content: space-between; font-size: 13px; border-bottom: 1px dashed #e6ecdf; padding: 5px 0; }
+.bm-kv span { color: #5c6a56; }
+.bm-fn-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px 14px; background: #f8faf5; border-top: 1px solid #e6ecdf; }
+.bm-fn-actions .btn { padding: 6px 10px; font-size: 12px; }
+@media (max-width: 767px) {
+  .bm-toolbar { justify-content: flex-start; } .bm-toolbar .btn { flex: 1 1 45%; }
+  .bm-stats { gap: 16px; } .bm-stats > div { flex: 1 1 28%; }
+  .bm-fn-body { grid-template-columns: 1fr; }
+}

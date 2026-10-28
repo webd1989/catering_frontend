@@ -69,6 +69,9 @@
                                         
                                         <td class="text-capitalize whitespace-nowrap">{{user.display_date}}</td>
                                         <td class="text-capitalize whitespace-nowrap">
+                                            <a routerLink="/booking-menus/{{user?.id}}" class="text-capitalize font-12 text-success me-3" title="Menus / Equipment / Material for this booking">
+                                                <i class="fas fa-utensils"></i>
+                                            </a>
                                             <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#createTemplate" (click)="getUser(user.id)" class="text-capitalize font-12 text-info me-3">
                                                 <i class="far fa-edit"></i>
                                             </a>

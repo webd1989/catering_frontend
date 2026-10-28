@@ -1,0 +1,239 @@
+<main>
+    <div class="main-wrapper">
+        <div id="content">
+            <app-header></app-header>
+            <div class="mainTabss">
+                <app-tabs></app-tabs>
+                <div class="main-area position-relative">
+
+                    <!-- ============ title bar ============ -->
+                    <div class="page-card-title">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-12 mb-2">
+                                <h4 class="font-16 mb-0">
+                                    <i class="fas fa-truck-loading text-success"></i>
+                                    {{mode==='new' ? 'New Equipment Issue Checklist' : 'Equipment Issue ' + (issue?.issue_no || '')}}
+                                    <span *ngIf="issue" class="badge ei-status {{badge(issue?.issue_status)}}">{{issue?.issue_status | titlecase}}</span>
+                                </h4>
+                                <div class="ei-sub" *ngIf="booking">
+                                    <b>{{booking?.booking_title}}</b> · {{booking?.name}} · {{booking?.phone}}
+                                    <span *ngIf="booking?.location"> · {{booking?.location}}</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-12 mb-2 ei-toolbar">
+                                <ng-container *ngIf="mode==='view'">
+                                    <button type="button" class="btn btn-success btn-sm text-uppercase" (click)="generatePdf()" [disabled]="busy || pdfLoading"><i class="far fa-file-pdf"></i> PDF / WhatsApp</button>
+                                    <a routerLink="/equipment-issue/{{bookingId}}" class="btn btn-light btn-sm text-uppercase"><i class="fas fa-plus"></i> New Slip</a>
+                                </ng-container>
+                                <a routerLink="/booking-menus/{{bookingId}}" class="btn btn-secondary btn-sm text-uppercase"><i class="fas fa-arrow-left"></i> Booking</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page-card-body p-20">
+                        <div *ngIf="loading" class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+
+                        <ng-container *ngIf="!loading && booking">
+
+                            <!-- ============ step strip ============ -->
+                            <div class="ei-steps">
+                                <div class="ei-step" [class.on]="status()==='new' || isDraft()" [class.done]="isOut() || isReturned()"><span>1</span> Draft<small>list banao</small></div>
+                                <div class="ei-step" [class.on]="status()==='issued'" [class.done]="status()==='delivered' || isReturned()"><span>2</span> Issued<small>store se nikla · stock −</small></div>
+                                <div class="ei-step" [class.on]="status()==='delivered'" [class.done]="isReturned()"><span>3</span> Delivered<small>venue par pahuncha</small></div>
+                                <div class="ei-step" [class.on]="isReturned()" [class.done]="isReturned()"><span>4</span> Returned<small>wapas · stock +</small></div>
+                            </div>
+
+                            <!-- ============ header form ============ -->
+                            <div class="card border-radius-10 mb-3 main-bg-color">
+                                <div class="card-body p-20">
+                                    <div class="row">
+                                        <div class="col-lg-2 col-md-4 col-6 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Issue Date</label>
+                                            <input type="date" class="form-control" [(ngModel)]="form.issue_date" [disabled]="isReturned()">
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-6 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Issued To (Team Member) <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Name" [(ngModel)]="form.issued_to" [disabled]="isReturned()">
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Phone</label>
+                                            <input type="text" class="form-control" placeholder="WhatsApp no." [(ngModel)]="form.issued_to_phone" [disabled]="isReturned()">
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Vehicle No</label>
+                                            <input type="text" class="form-control" [(ngModel)]="form.vehicle_no" [disabled]="isReturned()">
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-6 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Driver</label>
+                                            <input type="text" class="form-control" [(ngModel)]="form.driver_name" [disabled]="isReturned()">
+                                        </div>
+                                        <div class="col-lg-6 col-md-8 col-12 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Venue / Garden</label>
+                                            <input type="text" class="form-control" [(ngModel)]="form.venue" [disabled]="isReturned()">
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-12 form-group">
+                                            <label class="text-uppercase font-weight-400 font-12 mb-10">Notes for team</label>
+                                            <input type="text" class="form-control" placeholder="e.g. Chafing dish fuel alag se, 2 extra table" [(ngModel)]="form.notes" [disabled]="isReturned()">
+                                        </div>
+                                    </div>
+                                    <div class="ei-fns">
+                                        <span class="badge bg-light text-dark" *ngFor="let f of functions"><i class="far fa-calendar-alt"></i> {{f.title || 'Function'}} · {{f.event_date | date:'dd MMM'}} · {{f.no_of_guest | number}} pax</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="mode==='new' && missing?.length" class="alert alert-warning ei-note"><i class="fas fa-exclamation-triangle"></i> Menu pending for: <b>{{missing.join(', ')}}</b> — in functions ka equipment is list me nahi hai. Menu final karke phir slip banao, ya abhi manual add karo.</div>
+                            <div *ngIf="mode==='new' && lines.length===0 && !missing?.length" class="alert alert-info ei-note">Is booking ke menus me koi equipment mapping nahi mili. Pehle <a routerLink="/booking-menus/{{bookingId}}">menu attach</a> karo.</div>
+
+                            <!-- ============ progress tiles (view) ============ -->
+                            <div class="row ei-tiles" *ngIf="mode==='view'">
+                                <div class="col-md-3 col-6"><div class="ei-tile"><div class="ei-v">{{summary.lines}}</div><div class="ei-l">Lines · {{fmt(totalIssued())}} pcs</div></div></div>
+                                <div class="col-md-3 col-6"><div class="ei-tile" [class.ei-good]="summary.packed===summary.lines"><div class="ei-v">{{summary.packed}}<small>/{{summary.lines}}</small></div><div class="ei-l">Store Out</div><div class="ei-bar"><div [style.width.%]="pct(summary.packed)"></div></div></div></div>
+                                <div class="col-md-3 col-6"><div class="ei-tile" [class.ei-good]="summary.loaded===summary.lines"><div class="ei-v">{{summary.loaded}}<small>/{{summary.lines}}</small></div><div class="ei-l">Loaded</div><div class="ei-bar"><div [style.width.%]="pct(summary.loaded)"></div></div></div></div>
+                                <div class="col-md-3 col-6"><div class="ei-tile" [class.ei-good]="summary.delivered===summary.lines"><div class="ei-v">{{summary.delivered}}<small>/{{summary.lines}}</small></div><div class="ei-l">Site Received</div><div class="ei-bar"><div [style.width.%]="pct(summary.delivered)"></div></div></div></div>
+                            </div>
+
+                            <!-- ============ filters ============ -->
+                            <div class="ei-filters">
+                                <input type="text" class="form-control" placeholder="Search equipment…" [(ngModel)]="search">
+                                <label class="ei-check" *ngIf="canTick() && !returnMode"><input type="checkbox" [(ngModel)]="onlyPending"> Only pending</label>
+                                <button *ngIf="canEditQty()" type="button" class="btn btn-light btn-sm" (click)="fillAll()" [disabled]="busy" title="Issue qty = required qty"><i class="fas fa-equals"></i> Qty = Required</button>
+                                <ng-container *ngIf="canTick() && !returnMode">
+                                    <button type="button" class="btn btn-light btn-sm" (click)="tickAll('packed')" [disabled]="busy"><i class="fas fa-check-double"></i> All Store Out</button>
+                                    <button type="button" class="btn btn-light btn-sm" (click)="tickAll('loaded')" [disabled]="busy"><i class="fas fa-check-double"></i> All Loaded</button>
+                                </ng-container>
+                            </div>
+
+                            <!-- ============ lines ============ -->
+                            <div class="card border-radius-10 mb-3 main-bg-color ei-group" *ngFor="let g of groups(); trackBy: trackGroup">
+                                <div class="ei-group-head"><i class="fas fa-toolbox"></i> {{g.name}} <span class="badge bg-secondary">{{g.rows.length}}</span></div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped mb-0 ei-table" [class.ei-return]="returnMode">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-uppercase">Equipment</th>
+                                                <th class="text-uppercase text-end">Required</th>
+                                                <th class="text-uppercase text-end" *ngIf="mode==='new'">In Stock</th>
+                                                <th class="text-uppercase text-end">Issue Qty</th>
+                                                <ng-container *ngIf="mode==='view' && !returnMode">
+                                                    <th class="text-uppercase text-center ei-tick-h">Store<br>Out</th>
+                                                    <th class="text-uppercase text-center ei-tick-h">Loaded</th>
+                                                    <th class="text-uppercase text-center ei-tick-h">Site<br>Recd</th>
+                                                </ng-container>
+                                                <ng-container *ngIf="returnMode">
+                                                    <th class="text-uppercase text-end">Returned</th>
+                                                    <th class="text-uppercase text-end">Damaged</th>
+                                                    <th class="text-uppercase text-end">Missing</th>
+                                                </ng-container>
+                                                <th class="text-uppercase">Remarks</th>
+                                                <th *ngIf="canEditQty()"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let l of g.rows; trackBy: trackRow" [class.ei-done]="l.packed && l.loaded && l.delivered && !returnMode" [class.ei-zero]="canEditQty() && !(l.qty_issued > 0)" [class.ei-short]="mode==='new' && l.qty_required > l.in_stock">
+                                                <td data-label="Equipment"><b>{{l.equipment}}</b> <small class="text-muted">{{l.unit}}</small><div *ngIf="mode==='new' && l.functions" class="ei-fn">{{l.functions}}</div></td>
+                                                <td data-label="Required" class="text-end text-muted">{{fmt(l.qty_required)}}</td>
+                                                <td data-label="In Stock" class="text-end" *ngIf="mode==='new'" [class.text-danger]="l.qty_required > l.in_stock">{{fmt(l.in_stock)}}</td>
+                                                <td data-label="Issue Qty" class="text-end ei-qty">
+                                                    <input *ngIf="canEditQty()" type="number" min="0" step="1" class="form-control form-control-sm ei-num" [(ngModel)]="l.qty_issued" [disabled]="busy">
+                                                    <b *ngIf="!canEditQty()">{{fmt(l.qty_issued)}}</b>
+                                                </td>
+                                                <ng-container *ngIf="mode==='view' && !returnMode">
+                                                    <td data-label="Store Out" class="text-center ei-tick"><button type="button" class="ei-chk" [class.on]="l.packed" (click)="tick(l,'packed')" [disabled]="!canTick() || l._busy"><i class="fas fa-check"></i></button></td>
+                                                    <td data-label="Loaded" class="text-center ei-tick"><button type="button" class="ei-chk" [class.on]="l.loaded" (click)="tick(l,'loaded')" [disabled]="!canTick() || l._busy"><i class="fas fa-check"></i></button></td>
+                                                    <td data-label="Site Recd" class="text-center ei-tick"><button type="button" class="ei-chk" [class.on]="l.delivered" (click)="tick(l,'delivered')" [disabled]="!canTick() || l._busy"><i class="fas fa-check"></i></button></td>
+                                                </ng-container>
+                                                <ng-container *ngIf="returnMode">
+                                                    <td data-label="Returned" class="text-end ei-qty"><input *ngIf="!isReturned()" type="number" min="0" class="form-control form-control-sm ei-num" [(ngModel)]="l.qty_returned" [disabled]="busy"><b *ngIf="isReturned()">{{fmt(l.qty_returned)}}</b></td>
+                                                    <td data-label="Damaged" class="text-end ei-qty"><input *ngIf="!isReturned()" type="number" min="0" class="form-control form-control-sm ei-num ei-dmg" [(ngModel)]="l.qty_damaged" [disabled]="busy"><b *ngIf="isReturned()" class="text-danger">{{l.qty_damaged > 0 ? fmt(l.qty_damaged) : '—'}}</b></td>
+                                                    <td data-label="Missing" class="text-end" [class.text-danger]="missingQty(l) > 0"><b>{{missingQty(l) > 0 ? fmt(missingQty(l)) : '—'}}</b></td>
+                                                </ng-container>
+                                                <td data-label="Remarks"><input *ngIf="!isReturned()" type="text" class="form-control form-control-sm" [(ngModel)]="l.remarks" [disabled]="busy" placeholder="—"><span *ngIf="isReturned()">{{l.remarks}}</span></td>
+                                                <td *ngIf="canEditQty()" class="text-center"><button type="button" class="ei-x" (click)="removeLine(l)" title="Remove from slip" [disabled]="busy"><i class="fas fa-times"></i></button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div *ngIf="lines.length && groups().length===0" class="text-center text-muted py-4">No matching lines.</div>
+
+                            <!-- ============ action bar ============ -->
+                            <div class="ei-actions">
+                                <div class="ei-total"><b>{{lineCount()}}</b> lines · <b>{{fmt(totalIssued())}}</b> pcs</div>
+                                <div class="ei-btns">
+                                    <ng-container *ngIf="mode==='new'">
+                                        <button type="button" class="btn btn-light text-uppercase" (click)="create(false)" [disabled]="busy || !lines.length"><i class="fas" [class.fa-save]="!busy" [class.fa-spinner]="busy" [class.fa-spin]="busy"></i> Save Draft</button>
+                                        <button type="button" class="btn btn-success text-uppercase" (click)="create(true)" [disabled]="busy || !lines.length"><i class="fas fa-truck-loading"></i> Save &amp; Issue (stock −)</button>
+                                    </ng-container>
+                                    <ng-container *ngIf="mode==='view' && isDraft()">
+                                        <button type="button" class="btn btn-light text-danger text-uppercase" (click)="deleteIssue()" [disabled]="busy"><i class="far fa-trash-alt"></i></button>
+                                        <button type="button" class="btn btn-light text-uppercase" (click)="save()" [disabled]="busy"><i class="fas fa-save"></i> Save</button>
+                                        <button type="button" class="btn btn-success text-uppercase" (click)="markIssued()" [disabled]="busy"><i class="fas fa-truck-loading"></i> Mark Issued (stock −)</button>
+                                    </ng-container>
+                                    <ng-container *ngIf="mode==='view' && isOut() && !returnMode">
+                                        <button *ngIf="status()==='issued'" type="button" class="btn btn-light text-uppercase" (click)="revert()" [disabled]="busy" title="Undo issue, stock back"><i class="fas fa-undo"></i></button>
+                                        <button type="button" class="btn btn-light text-uppercase" (click)="save()" [disabled]="busy"><i class="fas fa-save"></i> Save</button>
+                                        <button *ngIf="status()==='issued'" type="button" class="btn btn-info text-uppercase" (click)="markDelivered()" [disabled]="busy"><i class="fas fa-map-marker-alt"></i> Delivered at Venue</button>
+                                        <button type="button" class="btn btn-warning text-uppercase" (click)="startReturn()" [disabled]="busy"><i class="fas fa-undo-alt"></i> Record Return</button>
+                                    </ng-container>
+                                    <ng-container *ngIf="mode==='view' && returnMode && !isReturned()">
+                                        <button type="button" class="btn btn-light text-uppercase" (click)="cancelReturn()" [disabled]="busy">Cancel</button>
+                                        <div class="ei-retdate"><label class="font-12 text-uppercase mb-0">Return date</label><input type="date" class="form-control form-control-sm" [(ngModel)]="form.return_date"></div>
+                                        <button type="button" class="btn btn-success text-uppercase" (click)="submitReturn()" [disabled]="busy"><i class="fas fa-check"></i> Save Return (stock +)</button>
+                                    </ng-container>
+                                    <ng-container *ngIf="isReturned()">
+                                        <span class="text-success"><i class="fas fa-check-circle"></i> Returned on {{issue?.return_date | date:'dd MMM yyyy'}} · stock updated</span>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <!-- ============ earlier slips (new mode) ============ -->
+                            <div class="card border-radius-10 mt-4 main-bg-color" *ngIf="mode==='new' && previous.length">
+                                <div class="ei-group-head"><i class="fas fa-history"></i> Earlier slips for this booking</div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped mb-0">
+                                        <thead><tr><th class="text-uppercase">Slip No</th><th class="text-uppercase">Date</th><th class="text-uppercase">Issued To</th><th class="text-uppercase">Vehicle</th><th class="text-uppercase">Status</th><th class="text-uppercase">Action</th></tr></thead>
+                                        <tbody>
+                                            <tr *ngFor="let p of previous">
+                                                <td data-label="Slip No"><b>{{p.issue_no}}</b></td>
+                                                <td data-label="Date">{{p.issue_date | date:'dd MMM yyyy'}}</td>
+                                                <td data-label="Issued To">{{p.issued_to}} <small class="text-muted">{{p.issued_to_phone}}</small></td>
+                                                <td data-label="Vehicle">{{p.vehicle_no || '-'}}</td>
+                                                <td data-label="Status"><span class="badge {{badge(p.issue_status)}}">{{p.issue_status | titlecase}}</span></td>
+                                                <td data-label="Action"><a routerLink="/equipment-issue/view/{{p.id}}" class="btn btn-primary btn-sm"><i class="fas fa-clipboard-check"></i> Open</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</main>
+
+<!-- PDF modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="issuePdfModal">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0 text-bg-light align-items-center">
+                <div class="d-flex justify-content-between w-100 me-3 align-items-center">
+                    <h4 class="modal-title font-16 mb-0">Checklist PDF <span class="text-muted font-12 ms-2">{{issue?.issue_no}}</span></h4>
+                    <div *ngIf="safePdfUrl">
+                        <button type="button" (click)="shareWhatsApp()" class="btn btn-success btn-sm text-uppercase"><i class="fab fa-whatsapp"></i> Send to {{issue?.issued_to || 'team'}}</button>
+                        <button type="button" (click)="openPdf()" class="btn btn-primary btn-sm text-uppercase ms-2"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                </div>
+                <button type="button" class="btn-close font12" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="pdfLoading" class="text-center py-5 text-muted"><i class="fas fa-spinner fa-spin fa-2x"></i><div class="mt-2">Generating PDF…</div></div>
+                <iframe *ngIf="safePdfUrl" [src]="safePdfUrl" width="100%" height="720" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

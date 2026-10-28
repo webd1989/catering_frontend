@@ -27,6 +27,30 @@ export class ItemsComponent implements OnInit,OnDestroy {
   sub_categories:any = [];
   categories:any = [];
   quotationData:any;
+
+  /* ---- Equipment calculator: multi-select (persists across pages/search) ---- */
+  eqSelected: { [id: number]: string } = {};
+  eqPax: number = 100;
+  eqCount(): number { return Object.keys(this.eqSelected).length; }
+  eqIsSelected(id: number): boolean { return !!this.eqSelected[id]; }
+  eqToggle(user: any) {
+    if (this.eqSelected[user.id]) { delete this.eqSelected[user.id]; } else { this.eqSelected[user.id] = user.title; }
+  }
+  eqToggleAll(checked: boolean) {
+    (this.users || []).forEach((u: any) => { if (checked) { this.eqSelected[u.id] = u.title; } else { delete this.eqSelected[u.id]; } });
+  }
+  eqAllOnPage(): boolean { return (this.users || []).length > 0 && (this.users || []).every((u: any) => !!this.eqSelected[u.id]); }
+  eqClear() { this.eqSelected = {}; }
+  eqOpenMaterial() {
+    const ids = Object.keys(this.eqSelected);
+    if (ids.length === 0) { this.toastr.error('Select at least one item', 'Error'); return; }
+    this.router.navigate(['/material-calculator'], { queryParams: { items: ids.join(','), pax: this.eqPax || 100 } });
+  }
+  eqOpen() {
+    const ids = Object.keys(this.eqSelected);
+    if (ids.length === 0) { this.toastr.error('Select at least one item', 'Error'); return; }
+    this.router.navigate(['/equipment-calculator'], { queryParams: { items: ids.join(','), pax: this.eqPax || 100 } });
+  }
   public SiteUrl = environment.documentUrl;
 
   destroy$ = new Subject();

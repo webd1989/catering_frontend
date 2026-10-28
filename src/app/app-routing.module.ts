@@ -40,6 +40,12 @@ import { DemandComponent } from './demand/demand.component';
 import { BookingCalenderComponent } from './booking-calender/booking-calender.component';
 import { QuotationListComponent } from './quotations/quotation-list/quotation-list.component';
 import { QuotationFormComponent } from './quotations/quotation-form/quotation-form.component';
+import { ItemEquipmentComponent } from './equipment/item-equipment/item-equipment.component';
+import { MenuEquipmentComponent } from './equipment/menu-equipment/menu-equipment.component';
+import { MenuMaterialComponent } from './equipment/menu-material/menu-material.component';
+import { BookingMenusComponent } from './booking-menus/booking-menus.component';
+import { BookingRequirementComponent } from './booking-menus/booking-requirement/booking-requirement.component';
+import { EquipmentIssueComponent } from './booking-menus/equipment-issue/equipment-issue.component';
 
 const routes: Routes = [
   {path:'',component:LoginComponent},
@@ -79,7 +85,18 @@ const routes: Routes = [
   {path:'booking-calender',component:BookingCalenderComponent},
   {path:'quotation-list',component:QuotationListComponent},
   {path:'create-quotation',component:QuotationFormComponent},
-  {path:'edit-quotation/:id',component:QuotationFormComponent}
+  {path:'edit-quotation/:id',component:QuotationFormComponent},
+  {path:'menu-equipment/:id',component:MenuEquipmentComponent},     // saved menu (Menu List)
+  {path:'item-equipment/:id',component:ItemEquipmentComponent},     // edit mapping of one item
+  {path:'item-requirement/:id',component:MenuEquipmentComponent},   // requirement of ONE item
+  {path:'equipment-calculator',component:MenuEquipmentComponent},    // ad-hoc: ?items=1,2,3&pax=500
+  {path:'menu-material/:id',component:MenuMaterialComponent},      // saved menu
+  {path:'item-material/:id',component:MenuMaterialComponent},      // one item
+  {path:'material-calculator',component:MenuMaterialComponent},     // ?items=1,2,3&pax=500
+  {path:'booking-menus/:id',component:BookingMenusComponent},
+  {path:'booking-requirement/:id',component:BookingRequirementComponent},
+  {path:'equipment-issue/view/:issueId',component:EquipmentIssueComponent},
+  {path:'equipment-issue/:bookingId',component:EquipmentIssueComponent},
 ];
 
 @NgModule({

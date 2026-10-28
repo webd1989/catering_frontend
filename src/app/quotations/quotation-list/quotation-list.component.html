@@ -77,6 +77,8 @@
                                             <button type="button" (click)="generatePdf(user.id)" class="ql-icon-btn text-success" title="PDF / Share" [disabled]="busy || pdfLoading"><i class="far fa-file-pdf"></i></button>
                                             <a routerLink="/edit-quotation/{{user?.id}}" class="ql-icon-btn text-info" title="Edit"><i class="far fa-edit"></i></a>
                                             <button type="button" (click)="duplicate(user.id)" class="ql-icon-btn text-warning" title="Duplicate" [disabled]="busy"><i class="far fa-copy"></i></button>
+                                            <button type="button" *ngIf="user?.quotation_status !== 'converted'" (click)="convert(user)" class="ql-icon-btn text-primary" title="Convert to Booking" [disabled]="busy"><i class="fas fa-calendar-check"></i></button>
+                                            <a *ngIf="user?.quotation_status === 'converted' && user?.booking_id" routerLink="/booking-menus/{{user?.booking_id}}" class="ql-icon-btn text-primary" title="Open booking"><i class="fas fa-utensils"></i></a>
                                             <button type="button" (click)="Delete(user.id)" class="ql-icon-btn text-red" title="Delete" [disabled]="busy"><i class="far fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
